@@ -22,13 +22,21 @@ namespace Ayudantia.src.controllers
             _context = context;
             _logger = logger;
         }
-       
+
 
         [HttpGet]
         public ActionResult<List<Product>> GetAll()
         {
+            
             var products = _context.Products.ToList();
             return Ok(products);
+        
+        }
+        [HttpGet("{id}")]
+        public ActionResult<Product> GetById(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            return product == null ? (ActionResult<Product>)NotFound() : (ActionResult<Product>)Ok(product);
         }
     }
 }
