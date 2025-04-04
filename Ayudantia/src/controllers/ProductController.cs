@@ -3,30 +3,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Ayudantia.src.data;
+using Ayudantia.src.models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Ayudantia.src.controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]")] //localhost:5000/Product
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
-
-        public ProductController(ILogger<ProductController> logger)
+        private readonly StoreContext _context;
+        public ProductController(ILogger<ProductController> logger, StoreContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public ActionResult<List<Product>> GetAll()
         {
-            return View("Error!");
+            
+            var products = _context.Products.ToList();
+            return Ok(products);
+        
+        }
+        [HttpGet("{id}")]
+        public ActionResult<Product> GetById(int id)
+        {
+            var product = _context.Products.FirstOrDefault(p => p.Id == id);
+            return product == null ? (ActionResult<Product>)NotFound() : (ActionResult<Product>)Ok(product);
         }
     }
 }
