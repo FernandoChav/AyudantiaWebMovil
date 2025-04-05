@@ -3,30 +3,40 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Ayudantia.Src.Data;
+using Ayudantia.Src.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Ayudantia.src.controllers
+namespace Ayudantia.Src.Controllers;
+
+
+public class ProductController(ILogger<ProductController> logger, UnitOfWork unitOfWork) : BaseController
 {
-    [Route("[controller]")]
-    public class ProductController : Controller
+    private readonly ILogger<ProductController> _logger = logger;
+    private readonly UnitOfWork _context = unitOfWork;
+   
+    [HttpGet]
+    public async Task<ActionResult<List<Product>>> GetAll()
     {
-        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(ILogger<ProductController> logger)
-        {
-            _logger = logger;
-        }
+        var products = await _context.ProductRepository.GetProductsAsync();
+        return Ok(products);
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
-        }
+    }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetById(int id)
+    {
+        var product = await _context.ProductRepository.GetProductByIdAsync(id);
+        return product == null ? (ActionResult<Product>)NotFound() : (ActionResult<Product>)Ok(product);
+    }
+    [HttpPost]
+    public async Task<ActionResult<Product>> Create(Product product)
+    {
+        await _context.ProductRepository.AddProductAsync(product);
+        await _context.SaveChangeAsync();
+        return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
     }
 }
