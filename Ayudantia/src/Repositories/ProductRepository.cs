@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ayudantia.Src.Repositories;
 
-public class ProductRepository(StoreContext store, ILogger<Product> logger): IProductRepository
+public class ProductRepository(StoreContext store, ILogger<Product> logger) : IProductRepository
 {
     private readonly StoreContext _context = store;
     private readonly ILogger<Product> _logger = logger;
-    
+
     public async Task AddProductAsync(Product product)
     {
         await _context.Products.AddAsync(product);

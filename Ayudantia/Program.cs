@@ -2,6 +2,7 @@
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Repositories;
+
 using Microsoft.EntityFrameworkCore;
 
 using Serilog;
@@ -23,7 +24,7 @@ try
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithMachineName());
-    
+
     var app = builder.Build();
     DbInitializer.InitDb(app);
     app.MapControllers();

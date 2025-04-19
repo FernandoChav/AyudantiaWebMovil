@@ -13,11 +13,10 @@ public class UnitOfWork(StoreContext context, IProductRepository productReposito
     public IUserRepository UserRepository { get; set; } = userRepository;
 
     public IProductRepository ProductRepository { get; set; } = productRepository;
-    
+
     public async Task SaveChangeAsync()
     {
         await _context.SaveChangesAsync();
     }
-   
-}
 
+}

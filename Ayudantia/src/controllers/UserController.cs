@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Ayudantia.Src.Dtos;
 using Ayudantia.Src.Data;
-
+using Ayudantia.Src.Dtos;
 using Ayudantia.Src.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ namespace Ayudantia.Src.Controllers
             return Ok(users);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateUser( CreateUserDto userDto)
+        public async Task<IActionResult> CreateUser(CreateUserDto userDto)
         {
             if (userDto.ConfirmPassword != userDto.Password)
             {
@@ -40,10 +39,10 @@ namespace Ayudantia.Src.Controllers
                 ShippingAddres = new ShippingAddres
                 {
                     Street = userDto.Street ?? string.Empty,
-                    Number = userDto.Number?? string.Empty,
-                    Commune = userDto.Commune?? string.Empty,
-                    Region = userDto.Region?? string.Empty,
-                    PostalCode = userDto.PostalCode?? string.Empty
+                    Number = userDto.Number ?? string.Empty,
+                    Commune = userDto.Commune ?? string.Empty,
+                    Region = userDto.Region ?? string.Empty,
+                    PostalCode = userDto.PostalCode ?? string.Empty
                 }
             };
             await _context.UserRepository.CreateUserAsync(user, user.ShippingAddres);

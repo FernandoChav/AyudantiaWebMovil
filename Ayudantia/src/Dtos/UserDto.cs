@@ -11,10 +11,10 @@ namespace Ayudantia.Src.Dtos
         public required string LastName { get; set; }
         public required string Email { get; set; }
         public required string Thelephone { get; set; }
-        public required string Street { get; set; }
-        public required string Number { get; set; }
-        public required string Commune {get; set;}
-        public required string Region { get; set; }
-        public required string PostalCode { get; set; }
+        public string? Street { get; set; }
+        public string? Number { get; set; }
+        public string? Commune { get; set; }
+        public string? Region { get; set; }
+        public string? PostalCode { get; set; }
     }
 }

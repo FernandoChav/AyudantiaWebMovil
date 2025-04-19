@@ -17,7 +17,7 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
 {
     private readonly ILogger<ProductController> _logger = logger;
     private readonly UnitOfWork _context = unitOfWork;
-   
+
     [HttpGet]
     public async Task<ActionResult<List<Product>>> GetAll()
     {

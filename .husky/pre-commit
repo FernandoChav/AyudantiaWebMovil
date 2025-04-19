@@ -20,4 +20,9 @@
 #echo 'Husky.Net is awesome!'
 dotnet format
 dotnet build 
-echo 'Husky.Net is awesome!'
+dotnet list ./Ayudantia/Ayudantia.csproj package --outdated
+
+dotnet ef migrations script --project ./Ayudantia/Ayudantia.csproj --startup-project ./Ayudantia/Ayudantia.csproj
+
+
+

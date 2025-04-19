@@ -14,7 +14,7 @@ namespace Ayudantia.Src.Models
         public required string Password { get; set; }
         public required string Thelephone { get; set; }
         // Navigation properties
-        public ShippingAddres? ShippingAddres { get; set; } 
-        
+        public ShippingAddres? ShippingAddres { get; set; }
+
     }
 }
