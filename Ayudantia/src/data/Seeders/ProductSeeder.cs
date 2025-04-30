@@ -11,7 +11,7 @@ namespace Ayudantia.Src.Data.Seeders
 {
     public class ProductSeeder
     {
-         public static List<Product> GenerateProducts(int quantity = 10)
+        public static List<Product> GenerateProducts(int quantity = 10)
         {
             var faker = new Faker("es");
 

@@ -12,7 +12,7 @@ namespace Ayudantia.Src.Models
         public required string FirtsName { get; set; }
         public required string LastName { get; set; }
         public required string Thelephone { get; set; }
-       
+
         // Navigation properties
         public ShippingAddres? ShippingAddres { get; set; }
 

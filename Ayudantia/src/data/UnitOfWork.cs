@@ -10,7 +10,7 @@ namespace Ayudantia.Src.Data;
 public class UnitOfWork(StoreContext context, IProductRepository productRepository)
 {
     private readonly StoreContext _context = context;
-    
+
 
     public IProductRepository ProductRepository { get; set; } = productRepository;
 
