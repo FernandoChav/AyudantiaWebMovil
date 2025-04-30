@@ -16,7 +16,7 @@ namespace Ayudantia.Src.Models
         public required string PostalCode { get; set; }
 
         // Navigation properties
-        public int UserId { get; set; }
+        public string  UserId { get; set; } = null!;
         public User User { get; set; } = null!;
     }
 }

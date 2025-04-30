@@ -5,7 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ayudantia.Src.Data;
+using Ayudantia.Src.Extensions;
+using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Models;
+using Ayudantia.Src.RequestHelpers;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -19,12 +22,29 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
     private readonly UnitOfWork _context = unitOfWork;
 
     [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetAll()
+    public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged([FromQuery] ProductParams productParams)
     {
+        var query = _context.ProductRepository.GetQueryableProducts();
 
-        var products = await _context.ProductRepository.GetProductsAsync();
-        return Ok(products);
+        // Aplicar filtros y orden
+        query = query.Search(productParams.Search)
+                     .Filter(productParams.Brands, productParams.Categories)
+                     .Sort(productParams.OrderBy);
 
+        // Obtener paginación
+        var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+
+        // Agregar metadata de paginación al Header HTTP
+        Response.AddPaginationHeader(pagedList.Metadata);
+
+        // Retornar respuesta estándar
+        var response = new ApiResponse<IEnumerable<Product>>(
+            true,
+            "Products retrieved successfully",
+            pagedList
+        );
+
+        return Ok(response);
     }
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetById(int id)

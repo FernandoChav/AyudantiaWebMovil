@@ -36,6 +36,11 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
         return await _context.Products.ToListAsync() ?? throw new Exception("No products found");
     }
 
+    public IQueryable<Product> GetQueryableProducts()
+    {
+        return _context.Products.AsQueryable();
+    }
+
     public async Task UpdateProductAsync(Product product)
     {
         var existingProduct = await _context.Products.FindAsync(product.Id) ?? throw new Exception("Product not found");
