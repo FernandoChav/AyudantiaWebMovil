@@ -11,5 +11,5 @@ namespace Ayudantia.Src.Controllers;
 [Route("api/[controller]")]
 public class BaseController : ControllerBase
 {
-    
+
 }

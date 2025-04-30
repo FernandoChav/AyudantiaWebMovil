@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ayudantia.Src.Repositories;
 
-public class ProductRepository(StoreContext store, ILogger<Product> logger): IProductRepository
+public class ProductRepository(StoreContext store, ILogger<Product> logger) : IProductRepository
 {
     private readonly StoreContext _context = store;
     private readonly ILogger<Product> _logger = logger;
-    
+
     public async Task AddProductAsync(Product product)
     {
         await _context.Products.AddAsync(product);
@@ -34,6 +34,11 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger): IPr
     public async Task<IEnumerable<Product>> GetProductsAsync()
     {
         return await _context.Products.ToListAsync() ?? throw new Exception("No products found");
+    }
+
+    public IQueryable<Product> GetQueryableProducts()
+    {
+        return _context.Products.AsQueryable();
     }
 
     public async Task UpdateProductAsync(Product product)

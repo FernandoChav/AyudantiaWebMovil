@@ -14,4 +14,7 @@ public interface IProductRepository
     Task AddProductAsync(Product product);
     void DeleteProductAsync(Product product);
     Task UpdateProductAsync(Product product);
+
+    IQueryable<Product> GetQueryableProducts();
+
 }

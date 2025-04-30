@@ -10,18 +10,38 @@ namespace Ayudantia.Src.Mappers
 {
     public class UserMapper
     {
-        public static UserDto MapToDTO(User user) =>
-             new()
+
+        public static User RegisterToUser(RegisterDto registerDto) =>
+            new()
+            {
+                UserName = registerDto.Email,
+                FirtsName = registerDto.FirtsName,
+                LastName = registerDto.LastName,
+                Thelephone = registerDto.Thelephone,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.Thelephone,
+                ShippingAddres = new ShippingAddres
+                {
+                    Street = registerDto.Street ?? string.Empty,
+                    Number = registerDto.Number ?? string.Empty,
+                    Commune = registerDto.Commune ?? string.Empty,
+                    Region = registerDto.Region ?? string.Empty,
+                    PostalCode = registerDto.PostalCode ?? string.Empty
+                }
+            };
+        public static UserDto UserToUserDto(User user, string token) =>
+            new()
             {
                 FirtsName = user.FirtsName,
                 LastName = user.LastName,
-                Thelephone = user.Thelephone,
-                Email = user.Email,
-                Street = user.ShippingAddres?.Street ?? string.Empty,
-                Number = user.ShippingAddres?.Number ?? string.Empty,
-                Commune = user.ShippingAddres?.Commune ?? string.Empty,
-                Region = user.ShippingAddres?.Region ?? string.Empty,
-                PostalCode = user.ShippingAddres?.PostalCode ?? string.Empty,
-            };    
+                Email = user.Email ?? string.Empty,
+                Thelephone = user.PhoneNumber ?? string.Empty,
+                Street = user.ShippingAddres?.Street,
+                Number = user.ShippingAddres?.Number,
+                Commune = user.ShippingAddres?.Commune,
+                Region = user.ShippingAddres?.Region,
+                PostalCode = user.ShippingAddres?.PostalCode,
+                Token = token
+            };
     }
 }
