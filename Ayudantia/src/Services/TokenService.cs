@@ -30,7 +30,7 @@ namespace Ayudantia.Src.Services
             var claims = new List<Claim>
             {
                new(JwtRegisteredClaimNames.Email, user.Email!),
-               new(JwtRegisteredClaimNames.GivenName, user.UserName!),
+               new(JwtRegisteredClaimNames.GivenName, user.FirtsName),
                new(ClaimTypes.Role, role),
             };
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

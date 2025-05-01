@@ -56,9 +56,9 @@ namespace Ayudantia.Src.Controllers
                 var roleName = role.FirstOrDefault() ?? "User";
 
                 var token = _tokenService.GenerateToken(user, roleName);
-                var userDto = UserMapper.UserToUserDto(user, token);
+                var userDto = UserMapper.UserToAuthenticatedDto(user, token);
 
-                return Ok(new ApiResponse<UserDto>(true, "Usuario registrado exitosamente", userDto));
+                return Ok(new ApiResponse<AuthenticatedUserDto>(true, "Usuario registrado exitosamente", userDto));
             }
             catch (Exception ex)
             {
@@ -80,19 +80,28 @@ namespace Ayudantia.Src.Controllers
                     return Unauthorized(new ApiResponse<string>(false, "Correo o contraseña inválidos"));
                 }
 
+                if (!user.IsActive)
+                {
+                    return Unauthorized(new ApiResponse<string>(false, "Tu cuenta está deshabilitada. Contacta al administrador."));
+                }
+
                 var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
                 if (!result)
                 {
                     return Unauthorized(new ApiResponse<string>(false, "Correo o contraseña inválidos"));
                 }
 
+                // Opcional: registrar último acceso
+                user.LastAccess = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleName = roles.FirstOrDefault() ?? "User";
 
                 var token = _tokenService.GenerateToken(user, roleName);
-                var userDto = UserMapper.UserToUserDto(user, token);
+                var userDto = UserMapper.UserToAuthenticatedDto(user, token);
 
-                return Ok(new ApiResponse<UserDto>(true, "Login exitoso", userDto));
+                return Ok(new ApiResponse<AuthenticatedUserDto>(true, "Login exitoso", userDto));
             }
             catch (Exception ex)
             {

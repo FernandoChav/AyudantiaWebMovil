@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -9,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ayudantia.Src.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityRelations : Migration
+    public partial class UserFinalMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,13 +21,14 @@ namespace Ayudantia.Src.Data.Migrations
                 name: "PK_Users",
                 table: "Users");
 
-            migrationBuilder.DropColumn(
-                name: "Password",
-                table: "Users");
-
             migrationBuilder.RenameTable(
                 name: "Users",
                 newName: "AspNetUsers");
+
+            migrationBuilder.RenameColumn(
+                name: "Password",
+                table: "AspNetUsers",
+                newName: "RegisteredAt");
 
             migrationBuilder.AlterColumn<string>(
                 name: "UserId",
@@ -69,12 +69,31 @@ namespace Ayudantia.Src.Data.Migrations
                 type: "TEXT",
                 nullable: true);
 
+            migrationBuilder.AddColumn<string>(
+                name: "DeactivationReason",
+                table: "AspNetUsers",
+                type: "TEXT",
+                nullable: true);
+
             migrationBuilder.AddColumn<bool>(
                 name: "EmailConfirmed",
                 table: "AspNetUsers",
                 type: "INTEGER",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsActive",
+                table: "AspNetUsers",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "LastAccess",
+                table: "AspNetUsers",
+                type: "TEXT",
+                nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "LockoutEnabled",
@@ -368,7 +387,19 @@ namespace Ayudantia.Src.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
+                name: "DeactivationReason",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
                 name: "EmailConfirmed",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "IsActive",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastAccess",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
@@ -415,6 +446,11 @@ namespace Ayudantia.Src.Data.Migrations
                 name: "AspNetUsers",
                 newName: "Users");
 
+            migrationBuilder.RenameColumn(
+                name: "RegisteredAt",
+                table: "Users",
+                newName: "Password");
+
             migrationBuilder.AlterColumn<int>(
                 name: "UserId",
                 table: "ShippingAddres",
@@ -442,13 +478,6 @@ namespace Ayudantia.Src.Data.Migrations
                 oldClrType: typeof(string),
                 oldType: "TEXT")
                 .Annotation("Sqlite:Autoincrement", true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Password",
-                table: "Users",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: "");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Users",

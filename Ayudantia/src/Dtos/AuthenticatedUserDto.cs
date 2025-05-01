@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 
 namespace Ayudantia.Src.Dtos
 {
-    public class UserDto
+    public class AuthenticatedUserDto
     {
         public string FirtsName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Thelephone { get; set; } = null!;
+
+        public string Token { get; set; } = null!;
 
         public string? Street { get; set; }
         public string? Number { get; set; }
