@@ -63,7 +63,7 @@ try
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithMachineName());
-    
+
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();

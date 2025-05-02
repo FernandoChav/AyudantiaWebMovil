@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ayudantia.Src.Controllers
 {
-    
+
     public class UserController(ILogger<UserController> logger, UnitOfWork unitOfWork) : BaseController
     {
         private readonly ILogger<UserController> _logger = logger;
@@ -100,21 +100,5 @@ namespace Ayudantia.Src.Controllers
             var message = user.IsActive ? "Usuario habilitado correctamente" : "Usuario deshabilitado correctamente";
             return Ok(new ApiResponse<string>(true, message));
         }
-        [AllowAnonymous]
-        [HttpGet("ping")]
-        public IActionResult Ping()
-        {
-            return Ok("pong");
-        }
-
-        [AllowAnonymous]
-        [HttpGet("test-role")]
-        public IActionResult TestRole()
-        {
-            var email = User.Identity?.Name;
-            var isAdmin = User.IsInRole("Admin");
-            return Ok(new { email, isAdmin });
-        }
-
     }
 }
