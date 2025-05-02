@@ -23,6 +23,7 @@ namespace Ayudantia.Src.Services
             _config = config;
             var signingKey = _config["Jwt:SignInKey"] ?? throw new ArgumentNullException("Key not found");
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
+            
         }
 
         public string GenerateToken(User user, string role)

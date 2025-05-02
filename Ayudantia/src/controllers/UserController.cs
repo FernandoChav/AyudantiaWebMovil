@@ -39,9 +39,9 @@ namespace Ayudantia.Src.Controllers
             {
                 var term = userParams.SearchTerm.ToLower();
                 query = query.Where(u =>
-                    u.FirtsName.ToLower().Contains(term) ||
-                    u.LastName.ToLower().Contains(term) ||
-                    u.Email.ToLower().Contains(term));
+                    u.FirtsName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
+                    u.LastName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
+                    (u.Email != null && u.Email.ToLower().Contains(term)));
             }
 
             if (userParams.RegisteredFrom.HasValue)
