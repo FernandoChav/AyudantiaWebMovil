@@ -23,6 +23,7 @@ namespace Ayudantia.Src.Services
             _config = config;
             var signingKey = _config["Jwt:SignInKey"] ?? throw new ArgumentNullException("Key not found");
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey));
+            
         }
 
         public string GenerateToken(User user, string role)
@@ -30,7 +31,7 @@ namespace Ayudantia.Src.Services
             var claims = new List<Claim>
             {
                new(JwtRegisteredClaimNames.Email, user.Email!),
-               new(JwtRegisteredClaimNames.GivenName, user.UserName!),
+               new(JwtRegisteredClaimNames.GivenName, user.FirtsName),
                new(ClaimTypes.Role, role),
             };
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

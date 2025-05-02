@@ -20,7 +20,7 @@ namespace Ayudantia.Src.Data.Seeders
             var users = new Faker<RegisterDto>()
                 .RuleFor(u => u.FirtsName, f => f.Person.FirstName)
                 .RuleFor(u => u.Email, f => f.Internet.Email())
-                .RuleFor(u => u.Password, f => f.Internet.Password(8, false, "[A-Za-z0-9]", "1a")) // <-- AQUI
+                .RuleFor(u => u.Password, f => "User" + f.Random.Number(1000, 9999).ToString())
                 .RuleFor(u => u.LastName, f => f.Person.LastName)
                 .RuleFor(u => u.Thelephone, f => f.Phone.PhoneNumber())
                 .RuleFor(u => u.ConfirmPassword, (f, u) => u.Password)
@@ -37,8 +37,42 @@ namespace Ayudantia.Src.Data.Seeders
 
         public static async Task CreateUsers(UserManager<User> userManager, List<RegisterDto> userDtos)
         {
+            var admin = new User
+            {
+                UserName = "ignacio.mancilla@gmail.com",
+                Email = "ignacio.mancilla@gmail.com",
+                FirtsName = "Ignacio",
+                LastName = "Mancilla",
+                Thelephone = "999999999",
+                RegisteredAt = DateTime.UtcNow,
+                IsActive = true,
+                ShippingAddres = new ShippingAddres
+                {
+                    Street = "Central",
+                    Number = "1000",
+                    Commune = "Santiago",
+                    Region = "RM",
+                    PostalCode = "0000000"
+                }
+            };
+
+            var existingAdmin = await userManager.FindByEmailAsync(admin.Email);
+            if (existingAdmin == null)
+            {
+                var result = await userManager.CreateAsync(admin, "Pa$$word2025");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(admin, "Admin");
+                }
+                else
+                {
+                    throw new Exception($"Error creating required admin: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
             foreach (var userDto in userDtos)
             {
+
                 var user = UserMapper.RegisterToUser(userDto);
                 user.UserName = userDto.Email;
                 user.Email = userDto.Email;

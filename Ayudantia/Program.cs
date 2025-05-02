@@ -1,4 +1,5 @@
 
+using System.Security.Claims;
 using System.Text;
 
 using Ayudantia.Src.Data;
@@ -24,6 +25,7 @@ try
     builder.Services.AddControllers();
 
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<ITokenServices, TokenService>();
     builder.Services.AddScoped<UnitOfWork>();
     builder.Services.AddIdentity<User, IdentityRole>(opt =>
@@ -34,15 +36,13 @@ try
         opt.SignIn.RequireConfirmedEmail = false;
     })
     .AddEntityFrameworkStores<StoreContext>();
-    builder.Services.AddAuthentication(opt =>
-    {
-        opt.DefaultAuthenticateScheme = "";
-        opt.DefaultChallengeScheme = "";
-        opt.DefaultForbidScheme = "";
-        opt.DefaultScheme = "";
-        opt.DefaultSignInScheme = "";
-        opt.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-    }).AddJwtBearer(opt =>
+    builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+    .AddJwtBearer(opt =>
     {
         opt.TokenValidationParameters = new TokenValidationParameters
         {
@@ -52,8 +52,8 @@ try
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
-            LifetimeValidator = (notBefore, expires, token, parameters) => expires > DateTime.UtcNow,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new ArgumentNullException("Key not found"))),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SignInKey"]!)),
+            RoleClaimType = ClaimTypes.Role
         };
     });
     builder.Services.AddDbContext<StoreContext>(options =>
@@ -63,6 +63,7 @@ try
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithMachineName());
+    
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();

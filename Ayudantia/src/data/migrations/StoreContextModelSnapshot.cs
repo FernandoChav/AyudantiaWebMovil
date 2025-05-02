@@ -103,6 +103,9 @@ namespace Ayudantia.Src.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DeactivationReason")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -112,6 +115,12 @@ namespace Ayudantia.Src.Data.Migrations
 
                     b.Property<string>("FirtsName")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastAccess")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
@@ -140,6 +149,9 @@ namespace Ayudantia.Src.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
