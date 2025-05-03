@@ -25,7 +25,7 @@ try
     // creacion de patron del builder de .net para crear la aplicacion
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
-
+    builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<ITokenServices, TokenService>();
