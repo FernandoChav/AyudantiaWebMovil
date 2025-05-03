@@ -46,9 +46,12 @@ namespace Ayudantia.Src.Repositories
 
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
-            var hasher = new PasswordHasher<User>();
-            var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
-            return result == PasswordVerificationResult.Success;
+            return await Task.Run(() =>
+            {
+                var hasher = new PasswordHasher<User>();
+                var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
+                return result == PasswordVerificationResult.Success;
+            });
         }
 
     }
