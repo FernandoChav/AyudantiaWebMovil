@@ -9,5 +9,8 @@ namespace Ayudantia.Src.Interfaces
         Task<User?> GetUserByIdAsync(string id);
         Task<User?> GetUserByEmailAsync(string email);
         Task UpdateUserAsync(User user); // Save status change or profile update
+        Task<User?> GetByEmailAsync(string email);
+        Task<bool> CheckPasswordAsync(User user, string password);
+
     }
 }

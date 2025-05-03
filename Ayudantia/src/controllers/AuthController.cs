@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Dtos;
@@ -13,7 +8,7 @@ using Ayudantia.Src.Models;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+
 
 namespace Ayudantia.Src.Controllers
 {

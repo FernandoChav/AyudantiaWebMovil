@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 
+using API.middleware;
+
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Models;
@@ -67,6 +69,7 @@ try
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();
+    app.UseMiddleware<ExceptionMIddleware>();
     await DbInitializer.InitDb(app);
     app.UseAuthentication();
     app.UseAuthorization();
