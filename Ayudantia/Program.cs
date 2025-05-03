@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 
+using API.middleware;
+
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Models;
@@ -23,7 +25,7 @@ try
     // creacion de patron del builder de .net para crear la aplicacion
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers();
-
+    builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
     builder.Services.AddScoped<ITokenServices, TokenService>();
@@ -63,10 +65,11 @@ try
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithMachineName());
-    
+
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();
+    app.UseMiddleware<ExceptionMIddleware>();
     await DbInitializer.InitDb(app);
     app.UseAuthentication();
     app.UseAuthorization();

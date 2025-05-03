@@ -37,5 +37,19 @@ namespace Ayudantia.Src.Repositories
         {
             await _userManager.UpdateAsync(user);
         }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _userManager.Users
+                .Include(u => u.ShippingAddres)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            var hasher = new PasswordHasher<User>();
+            var result = hasher.VerifyHashedPassword(user, user.PasswordHash!, password);
+            return result == PasswordVerificationResult.Success;
+        }
+
     }
 }

@@ -5,19 +5,11 @@ using System.Threading.Tasks;
 
 namespace Ayudantia.Src.Helpers
 {
-    public class ApiResponse<T>
+    public class ApiResponse<T>(bool success, string message, T? data = default, List<string>? errors = null)
     {
-        public bool Success { get; set; }
-        public string Message { get; set; } = string.Empty;
-        public T? Data { get; set; }
-        public List<string>? Errors { get; set; }
-
-        public ApiResponse(bool success, string message, T? data = default, List<string>? errors = null)
-        {
-            Success = success;
-            Message = message;
-            Data = data;
-            Errors = errors;
-        }
+        public bool Success { get; set; } = success;
+        public string Message { get; set; } = message;
+        public T? Data { get; set; } = data;
+        public List<string>? Errors { get; set; } = errors;
     }
 }
