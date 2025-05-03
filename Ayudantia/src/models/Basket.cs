@@ -14,7 +14,7 @@ namespace Ayudantia.Src.Models
 
         public void AddItem(Product product, int quantity)
         {
-            if (product == null)  ArgumentNullException.ThrowIfNull(product);
+            if (product == null) ArgumentNullException.ThrowIfNull(product);
             if (quantity <= 0) throw new ArgumentException("Quantity must be greater than 0 "
                 , nameof(quantity));
 
@@ -36,7 +36,7 @@ namespace Ayudantia.Src.Models
         }
         public void RemoveItem(int productId, int quantity)
         {
-            
+
             if (quantity <= 0) throw new ArgumentException("Quantity must be greater than 0 "
                 , nameof(quantity));
             var item = FindItem(productId);
@@ -45,11 +45,11 @@ namespace Ayudantia.Src.Models
 
             item.Quantity -= quantity;
 
-            if(item.Quantity <= 0)
+            if (item.Quantity <= 0)
             {
                 Items.Remove(item);
             }
-            
+
         }
 
         private BasketItem? FindItem(int productId)

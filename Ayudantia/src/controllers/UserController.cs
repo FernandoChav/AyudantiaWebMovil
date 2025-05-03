@@ -30,35 +30,19 @@ namespace Ayudantia.Src.Controllers
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<UserDto>>>> GetAll([FromQuery] UserParams userParams)
         {
-            var query = _unitOfWork.UserRepository.GetUsersQueryable();
-
-            if (userParams.IsActive.HasValue)
-                query = query.Where(u => u.IsActive == userParams.IsActive.Value);
-
-            if (!string.IsNullOrWhiteSpace(userParams.SearchTerm))
-            {
-                var term = userParams.SearchTerm.ToLower();
-                query = query.Where(u =>
-                    u.FirtsName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
-                    u.LastName.Contains(term, StringComparison.CurrentCultureIgnoreCase) ||
-                    (u.Email != null && u.Email.ToLower().Contains(term)));
-            }
-
-            if (userParams.RegisteredFrom.HasValue)
-                query = query.Where(u => u.RegisteredAt >= userParams.RegisteredFrom.Value);
-
-            if (userParams.RegisteredTo.HasValue)
-                query = query.Where(u => u.RegisteredAt <= userParams.RegisteredTo.Value);
+            var query = _unitOfWork.UserRepository.GetUsersQueryable()
+                .Filter(userParams.IsActive, userParams.RegisteredFrom, userParams.RegisteredTo)
+                .Search(userParams.SearchTerm)
+                .Sort(userParams.OrderBy);
 
             var total = await query.CountAsync();
 
             var users = await query
-                .OrderByDescending(u => u.RegisteredAt)
                 .Skip((userParams.PageNumber - 1) * userParams.PageSize)
                 .Take(userParams.PageSize)
                 .ToListAsync();
 
-            var dtos = users.Select(u => UserMapper.UserToUserDto(u)).ToList();
+            var dtos = users.Select(UserMapper.UserToUserDto).ToList();
 
             Response.AddPaginationHeader(new PaginationMetaData
             {
@@ -72,22 +56,23 @@ namespace Ayudantia.Src.Controllers
         }
         [Authorize(Roles = "Admin")]
         // GET /users/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string id)
+        [HttpGet("{email}")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string email)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
             var dto = UserMapper.UserToUserDto(user);
             return Ok(new ApiResponse<UserDto>(true, "Usuario encontrado", dto));
         }
+
         [Authorize(Roles = "Admin")]
         // PUT /users/{id}/status
-        [HttpPut("{id}/status")]
-        public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string id, [FromBody] ToggleStatusDto dto)
+        [HttpPut("{email}/status")]
+        public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string email, [FromBody] ToggleStatusDto dto)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ayudantia.Src.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class BasketMigrations : Migration
+    public partial class imageMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,12 @@ namespace Ayudantia.Src.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "INTEGER");
+
+            migrationBuilder.AddColumn<string>(
+                name: "PublicId",
+                table: "Products",
+                type: "TEXT",
+                nullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "Email",
@@ -433,6 +439,10 @@ namespace Ayudantia.Src.Data.Migrations
             migrationBuilder.DropIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "PublicId",
+                table: "Products");
 
             migrationBuilder.DropColumn(
                 name: "AccessFailedCount",

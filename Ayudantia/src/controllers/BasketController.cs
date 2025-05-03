@@ -33,7 +33,7 @@ namespace Ayudantia.Src.Controllers
             if (basket == null)
             {
                 basket = CreateBasket();
-                await _unitOfWork.SaveChangeAsync(); 
+                await _unitOfWork.SaveChangeAsync();
             }
 
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productId);

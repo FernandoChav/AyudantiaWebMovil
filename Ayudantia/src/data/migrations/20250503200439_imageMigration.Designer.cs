@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ayudantia.Src.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250503022607_BasketMigrations")]
-    partial class BasketMigrations
+    [Migration("20250503200439_imageMigration")]
+    partial class imageMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,9 @@ namespace Ayudantia.Src.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Stock")

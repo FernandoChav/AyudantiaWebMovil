@@ -81,6 +81,9 @@ namespace Ayudantia.Src.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Stock")
                         .HasColumnType("INTEGER");
 

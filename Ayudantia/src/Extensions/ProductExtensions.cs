@@ -41,8 +41,8 @@ namespace Ayudantia.Src.Extensions
         {
             query = orderBy switch
             {
-                "price" => query.OrderBy(p => p.Price),
-                "priceDesc" => query.OrderByDescending(p => p.Price),
+                "price" => query.OrderBy(p => (double)p.Price),
+                "priceDesc" => query.OrderByDescending(p => (double)p.Price),
                 _ => query.OrderBy(p => p.Name)
             };
             return query;
