@@ -8,7 +8,7 @@ using Ayudantia.Src.Models;
 
 namespace Ayudantia.Src.Mappers
 {
-    public static  class ProductMapper
+    public static class ProductMapper
     {
         public static Product FromCreateDto(ProductDto dto, List<string> urls, string? publicId = null)
         {
