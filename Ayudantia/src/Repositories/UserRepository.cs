@@ -53,6 +53,12 @@ namespace Ayudantia.Src.Repositories
                 return result == PasswordVerificationResult.Success;
             });
         }
+        public async Task<IdentityResult> UpdatePasswordAsync(User user, string newPassword)
+        => await _userManager.ChangePasswordAsync(user, user.PasswordHash!, newPassword);
 
+        public Task<User?> GetUserWithAddressByIdAsync(string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

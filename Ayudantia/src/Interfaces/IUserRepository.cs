@@ -1,6 +1,8 @@
 
 using Ayudantia.Src.Models;
 
+using Microsoft.AspNetCore.Identity;
+
 namespace Ayudantia.Src.Interfaces
 {
     public interface IUserRepository
@@ -11,6 +13,7 @@ namespace Ayudantia.Src.Interfaces
         Task UpdateUserAsync(User user); // Save status change or profile update
         Task<User?> GetByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(User user, string password);
-
+        Task<IdentityResult> UpdatePasswordAsync(User user, string newPassword);
+        Task<User?> GetUserWithAddressByIdAsync(string userId);
     }
 }

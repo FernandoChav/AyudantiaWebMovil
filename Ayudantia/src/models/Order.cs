@@ -9,21 +9,18 @@ namespace Ayudantia.Src.Models
     {
         public int Id { get; set; }
 
-        // Usuario que hizo el pedido
         public string UserId { get; set; } = string.Empty;
         public User User { get; set; } = null!;
 
-        // Dirección (copiada del usuario al momento de la orden)
-        public string Address { get; set; } = string.Empty;
+        // NUEVO: FK a ShippingAddress
+        public int ShippingAddressId { get; set; }
+        public ShippingAddres ShippingAddress { get; set; } = null!;
 
-        // Fecha y estado
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public string Status { get; set; } = "Creado"; // Podría usarse enum
+        public string Status { get; set; } = "Creado";
 
-        // Total pagado
         public decimal Total { get; set; }
 
-        // Productos comprados
         public List<OrderItem> Items { get; set; } = new();
     }
 }

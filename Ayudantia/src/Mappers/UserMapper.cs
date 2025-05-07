@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Dtos.User;
 using Ayudantia.Src.Models;
 
 namespace Ayudantia.Src.Mappers
@@ -64,5 +65,11 @@ namespace Ayudantia.Src.Mappers
                 LastAccess = user.LastAccess,
                 IsActive = user.IsActive
             };
+        public static void UpdateUserFromDto(User user, UpdateProfileDto dto)
+        {
+            user.FirtsName = dto.FirtsName;
+            user.LastName = dto.LastName;
+            user.Thelephone = dto.Phone ?? string.Empty;
+        }
     }
 }
