@@ -18,7 +18,7 @@ namespace Ayudantia.Src.Dtos
         public required string Brand { get; set; }
 
         public required string Category { get; set; }
-        
+
         public int Quantity { get; set; }
     }
 }

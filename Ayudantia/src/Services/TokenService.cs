@@ -30,6 +30,7 @@ namespace Ayudantia.Src.Services
         {
             var claims = new List<Claim>
             {
+               new Claim(ClaimTypes.NameIdentifier, user.Id),
                new(JwtRegisteredClaimNames.Email, user.Email!),
                new(JwtRegisteredClaimNames.GivenName, user.FirtsName),
                new(ClaimTypes.Role, role),

@@ -22,7 +22,7 @@ namespace Ayudantia.Src.Data.Seeders
                 .RuleFor(p => p.Price, f => f.Random.Decimal(5000, 50000))
                 .RuleFor(p => p.Brand, f => f.Company.CompanyName())
                 .RuleFor(p => p.Stock, f => f.Random.Int(10, 200))
-                .RuleFor(p => p.Urls, f => new string[]
+                .RuleFor(p => p.Urls, (f, p) => new List<string>
                 {
                     $"https://res.cloudinary.com/demo/image/upload/sample1.jpg",
                     $"https://res.cloudinary.com/demo/image/upload/sample2.jpg",
