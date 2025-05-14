@@ -9,6 +9,7 @@ using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Mappers;
 using Ayudantia.Src.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ayudantia.Src.Controllers
@@ -30,7 +31,7 @@ namespace Ayudantia.Src.Controllers
                 basket.ToDto()
             ));
         }
-
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<ActionResult<ApiResponse<BasketDto>>> AddItemToBasket(int productId, int quantity)
         {
@@ -48,6 +49,9 @@ namespace Ayudantia.Src.Controllers
             if (product == null)
                 return BadRequest(new ApiResponse<string>(false, "Producto no encontrado"));
 
+            if (!product.IsActive)
+                return BadRequest(new ApiResponse<string>(false, $"El producto '{product.Name}' está inactivo y no se puede agregar al carrito."));
+
             if (product.Stock == 0)
                 return BadRequest(new ApiResponse<string>(false, $"El producto '{product.Name}' no tiene stock disponible."));
 
@@ -64,7 +68,7 @@ namespace Ayudantia.Src.Controllers
                 : BadRequest(new ApiResponse<string>(false, "Ocurrió un problema al actualizar el carrito"));
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpDelete]
         public async Task<ActionResult<ApiResponse<BasketDto>>> RemoveItemFromBasket(int productId, int quantity)
         {

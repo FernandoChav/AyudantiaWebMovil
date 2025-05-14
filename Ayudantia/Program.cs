@@ -69,15 +69,31 @@ try
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithMachineName());
+    var corsSettings = builder.Configuration.GetSection("CorsSettings");
+    var allowedOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>();
+    var allowedHeaders = corsSettings.GetSection("AllowedHeaders").Get<string[]>();
+    var allowedMethods = corsSettings.GetSection("AllowedMethods").Get<string[]>();
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("DefaultCorsPolicy", policy =>
+        {
+            policy.WithOrigins(allowedOrigins!)
+                  .WithHeaders(allowedHeaders!)
+                  .WithMethods(allowedMethods!)
+                  .AllowCredentials(); // Si usas cookies para el basket
+        });
+    });
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();
     app.UseMiddleware<ExceptionMIddleware>();
     await DbInitializer.InitDb(app);
+    app.UseCors("DefaultCorsPolicy");
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+    
     // corremos la aplicacion
     // app.Run() es el metodo que se encarga de correr la aplicacion y escuchar las peticiones
     app.Run();

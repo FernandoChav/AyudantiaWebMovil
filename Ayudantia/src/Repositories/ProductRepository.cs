@@ -17,19 +17,21 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
         await _context.Products.AddAsync(product);
     }
 
-    public void DeleteProductAsync(Product product)
+    public Task DeleteProductAsync(Product product)
     {
         _context.Products.Remove(product);
+        return Task.CompletedTask;
     }
+
 
     public async Task<Product> GetProductByIdAsync(int id)
     {
-        return await _context.Products.FindAsync(id) ?? throw new Exception("Product not found");
+        return await _context.Products.FindAsync(id) ?? null;
     }
 
     public async Task<IEnumerable<Product>> GetProductsAsync()
     {
-        return await _context.Products.ToListAsync() ?? throw new Exception("No products found");
+        return await _context.Products.ToListAsync();
     }
 
     public IQueryable<Product> GetQueryableProducts()
@@ -37,15 +39,16 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
         return _context.Products.AsQueryable();
     }
 
-    public async Task UpdateProductAsync(Product product)
+    public Task UpdateProductAsync(Product product)
     {
-        var existingProduct = await _context.Products.FindAsync(product.Id) ?? throw new Exception("Product not found");
-        existingProduct.Name = product.Name;
-        existingProduct.Description = product.Description;
-        existingProduct.Price = product.Price;
-        existingProduct.Stock = product.Stock;
-        existingProduct.Urls = product.Urls;
-        existingProduct.Brand = product.Brand;
-        _context.Products.Update(existingProduct);
+        _context.Products.Update(product);
+        return Task.CompletedTask;
     }
+
+    public async Task<bool> IsProductInOrdersAsync(int productId)
+    {
+        return await _context.OrderItems.AnyAsync(i => i.ProductId == productId);
+    }
+
+
 }

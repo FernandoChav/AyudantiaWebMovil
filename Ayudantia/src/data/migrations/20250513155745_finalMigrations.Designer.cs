@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ayudantia.Src.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250503234542_OrderMigration")]
-    partial class OrderMigration
+    [Migration("20250513155745_finalMigrations")]
+    partial class finalMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,7 +117,7 @@ namespace Ayudantia.Src.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Ayudantia.Src.Models.Product", b =>
@@ -137,6 +137,9 @@ namespace Ayudantia.Src.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()

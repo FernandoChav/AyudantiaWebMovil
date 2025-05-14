@@ -19,5 +19,7 @@ namespace Ayudantia.Src.Models
         public required string Brand { get; set; }
 
         public string? PublicId { get; set; }
+        public bool IsActive { get; set; } = true;
+
     }
 }

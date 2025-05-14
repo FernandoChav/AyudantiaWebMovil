@@ -1,6 +1,7 @@
 
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Dtos.Auth;
 using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Mappers;
@@ -47,13 +48,9 @@ namespace Ayudantia.Src.Controllers
                     return StatusCode(500, new ApiResponse<string>(false, "Error al asignar el rol", null, roleUser.Errors.Select(e => e.Description).ToList()));
                 }
 
-                var role = await _userManager.GetRolesAsync(user);
-                var roleName = role.FirstOrDefault() ?? "User";
+                var userDto = UserMapper.UserToNewUserDto(user);
 
-                var token = _tokenService.GenerateToken(user, roleName);
-                var userDto = UserMapper.UserToAuthenticatedDto(user, token);
-
-                return Ok(new ApiResponse<AuthenticatedUserDto>(true, "Usuario registrado exitosamente", userDto));
+                return Ok(new ApiResponse<NewUserDto>(true, "Usuario registrado exitosamente", userDto));
             }
             catch (Exception ex)
             {

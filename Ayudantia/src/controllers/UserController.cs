@@ -144,6 +144,7 @@ namespace Ayudantia.Src.Controllers
 
             if (dto.NewPassword != dto.ConfirmPassword)
                 return BadRequest(new ApiResponse<string>(false, "La nueva contraseña y la confirmación no coinciden"));
+            if (dto.NewPassword == dto.CurrentPassword) return BadRequest(new ApiResponse<string>(false, "La nueva contraseña no puede ser igual a la actual"));
 
             var result = await _unitOfWork.UserRepository.UpdatePasswordAsync(user, dto.NewPassword);
             if (!result.Succeeded)
@@ -185,7 +186,7 @@ namespace Ayudantia.Src.Controllers
             if (address == null)
                 return NotFound(new ApiResponse<string>(false, "No tienes una dirección registrada. Usa el método POST para crear una."));
 
-           
+
             address.Street = dto.Street;
             address.Number = dto.Number;
             address.Commune = dto.Commune;

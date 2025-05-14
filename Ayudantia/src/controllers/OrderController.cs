@@ -47,6 +47,8 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
 
                 if (product.Stock < 0)
                     return BadRequest(new ApiResponse<string>(false, $"No hay suficiente stock para el producto {product.Name}"));
+                if (product.Stock == 0)
+                    product.IsActive = false;
             }
         }
 
@@ -59,7 +61,7 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
     }
 
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User")]
     [HttpGet]
     public async Task<ActionResult<ApiResponse<IEnumerable<OrderSummaryDto>>>> GetMyOrders()
     {

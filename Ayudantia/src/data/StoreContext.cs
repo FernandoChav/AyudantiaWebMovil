@@ -19,6 +19,7 @@ public class StoreContext(DbContextOptions<StoreContext> options) : IdentityDbCo
 
     public required DbSet<Basket> Baskets { get; set; }
     public required DbSet<Order> Orders { get; set; }
+    public required DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

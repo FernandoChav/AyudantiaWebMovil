@@ -27,27 +27,38 @@ namespace Ayudantia.Src.Services
 
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
         {
-            var uploadResult = new ImageUploadResult();
+            _ = new ImageUploadResult();
 
-            if (file.Length > 0)
+            if (file.Length == 0 || file.Length > 100 * 1024 * 1024) // 100MB
+                throw new ArgumentException("Archivo no válido o excede el tamaño permitido (100MB)");
+
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtensions.Contains(extension))
+                throw new ArgumentException("Formato de imagen no compatible");
+
+            using var stream = file.OpenReadStream();
+            var uploadParams = new ImageUploadParams
             {
-                using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(500).Width(500).Crop("fill")
-                };
+                File = new FileDescription(file.FileName, stream),
+                Folder = "products" 
+            };
 
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
-            }
-
+            ImageUploadResult? uploadResult = await _cloudinary.UploadAsync(uploadParams);
             return uploadResult;
         }
+
 
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
-            return await _cloudinary.DestroyAsync(deleteParams);
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+
+            if (result.Result == "not found")
+                return new DeletionResult { Result = "ok" }; 
+
+            return result;
         }
+
     }
 }
