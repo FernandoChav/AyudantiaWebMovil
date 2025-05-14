@@ -9,9 +9,9 @@ Permite gestionar productos, usuarios, pedidos y carrito de compras mediante una
 
 ## 👥 Integrantes del equipo
 
-- **Nombre:** Samuel Fuentes  
-- **Correo:** [samuel.fuentes@ejemplo.com](mailto:samuel.fuentes@ejemplo.com)  
-- **RUT:** 12.345.678-9  
+- **Nombre:** Fernando Chavez 
+- **Correo:** [fernando.chavez@alumnos.ucn.cl](mailto:fernando.chavez@alumnos.ucn.cl)  
+- **RUT:** 21.180.530 - 7 
 
 *(Agrega los datos de los demás integrantes si corresponde)*
 
