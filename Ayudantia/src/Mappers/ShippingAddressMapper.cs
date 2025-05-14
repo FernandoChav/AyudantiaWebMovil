@@ -8,7 +8,7 @@ using Ayudantia.Src.Models;
 
 namespace Ayudantia.Src.Mappers
 {
-    public static  class ShippingAddressMapper
+    public static class ShippingAddressMapper
     {
         public static ShippingAddres FromDto(CreateShippingAddressDto dto, string userId)
         {

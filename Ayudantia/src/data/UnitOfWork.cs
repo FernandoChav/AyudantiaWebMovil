@@ -7,7 +7,7 @@ using Ayudantia.Src.Interfaces;
 
 namespace Ayudantia.Src.Data;
 
-public class UnitOfWork(StoreContext context, IProductRepository productRepository, IUserRepository userRepository, IBasketRepository basketRepository, IOrderRepository orderRepository,IShippingAddressRepository ShippingAddressRepository) 
+public class UnitOfWork(StoreContext context, IProductRepository productRepository, IUserRepository userRepository, IBasketRepository basketRepository, IOrderRepository orderRepository, IShippingAddressRepository ShippingAddressRepository)
 {
     private readonly StoreContext _context = context;
     public IUserRepository UserRepository { get; set; } = userRepository;

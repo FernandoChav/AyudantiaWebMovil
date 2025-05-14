@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ayudantia.Src.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class OrderMigration : Migration
+    public partial class finalMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +38,13 @@ namespace Ayudantia.Src.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "INTEGER");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsActive",
+                table: "Products",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "PublicId",
@@ -362,7 +370,7 @@ namespace Ayudantia.Src.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItem",
+                name: "OrderItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -375,9 +383,9 @@ namespace Ayudantia.Src.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItem", x => x.Id);
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItem_Orders_OrderId",
+                        name: "FK_OrderItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
@@ -441,8 +449,8 @@ namespace Ayudantia.Src.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_OrderId",
-                table: "OrderItem",
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
@@ -490,7 +498,7 @@ namespace Ayudantia.Src.Data.Migrations
                 name: "BasketItems");
 
             migrationBuilder.DropTable(
-                name: "OrderItem");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -512,6 +520,10 @@ namespace Ayudantia.Src.Data.Migrations
             migrationBuilder.DropIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "IsActive",
+                table: "Products");
 
             migrationBuilder.DropColumn(
                 name: "PublicId",

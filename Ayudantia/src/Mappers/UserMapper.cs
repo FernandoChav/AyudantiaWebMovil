@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Dtos.Auth;
 using Ayudantia.Src.Dtos.User;
 using Ayudantia.Src.Models;
 
@@ -54,16 +55,17 @@ namespace Ayudantia.Src.Mappers
                 FirtsName = user.FirtsName,
                 LastName = user.LastName,
                 Email = user.Email ?? string.Empty,
-                Thelephone = user.PhoneNumber ?? string.Empty,
+
                 Token = token,
-                Street = user.ShippingAddres?.Street,
-                Number = user.ShippingAddres?.Number,
-                Commune = user.ShippingAddres?.Commune,
-                Region = user.ShippingAddres?.Region,
-                PostalCode = user.ShippingAddres?.PostalCode,
-                RegisteredAt = user.RegisteredAt,
-                LastAccess = user.LastAccess,
-                IsActive = user.IsActive
+
+
+            };
+        public static NewUserDto UserToNewUserDto(User user) =>
+            new()
+            {
+                FirstName = user.FirtsName,
+                LastName = user.LastName,
+                Email = user.Email ?? string.Empty
             };
         public static void UpdateUserFromDto(User user, UpdateProfileDto dto)
         {
