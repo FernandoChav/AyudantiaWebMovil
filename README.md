@@ -1,145 +1,92 @@
-AYUDANTIA IDWM - Backend E-Commerce
+# AYUDANTIA IDWM - Backend E-Commerce
 
-Descripción del Proyecto
+## 📄 Descripción del Proyecto
 
-Este sistema corresponde al backend de una plataforma de comercio electrónico desarrollada en el contexto del Taller de Introducción al Desarrollo Web/Móvil (IDWM) de la carrera de Ingeniería Civil en Computación e Informática. Permite gestionar productos, usuarios, pedidos y carrito de compras mediante una API REST desarrollada en ASP.NET Core.
+Este sistema corresponde al backend de una plataforma de comercio electrónico desarrollada en el contexto del **Taller de Introducción al Desarrollo Web/Móvil (IDWM)** de la carrera de **Ingeniería Civil en Computación e Informática**.  
+Permite gestionar productos, usuarios, pedidos y carrito de compras mediante una API REST desarrollada en ASP.NET Core.
 
-Integrantes del equipo
+---
 
-Nombre: Samuel Fuentes
+## 👥 Integrantes del equipo
 
-Correo: samuel.fuentes@ejemplo.com
+- **Nombre:** Samuel Fuentes  
+- **Correo:** [samuel.fuentes@ejemplo.com](mailto:samuel.fuentes@ejemplo.com)  
+- **RUT:** 12.345.678-9  
 
-RUT: 12.345.678-9
+*(Agrega los datos de los demás integrantes si corresponde)*
 
-(Agrega los datos de los demás integrantes si corresponde)
+---
 
-Tecnologías utilizadas
+## 🛠 Tecnologías utilizadas
 
-.NET 9 (ASP.NET Core Web API)
+- [.NET 9](https://dotnet.microsoft.com/en-us/download) (ASP.NET Core Web API)
+- Entity Framework Core (SQLite)
+- Identity + JWT Bearer para autenticación
+- Cloudinary para gestión de imágenes
+- Serilog para logging estructurado
+- Postman (para pruebas manuales y automatizadas)
+- Husky (.NET) para validaciones automáticas
 
-Entity Framework Core (SQLite)
+---
 
-Identity + JWT Bearer para autenticación
+## ⚙️ Instalación y Ejecución
 
-Cloudinary para gestión de imágenes
+### 🔑 Requisitos previos
 
-Serilog para logging estructurado
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download)
+- [SQLite](https://www.sqlite.org/download.html)
 
-Postman (para pruebas)
+### 🧪 Pasos
 
-Husky (.NET) para hooks de validación
+1. Clonar el repositorio y acceder a el proyecto:
 
-Instalación y Ejecución
+   ```bash
+   git clone https://github.com/FernandoChav/AyudantiaWebMovil.git
+   cd Ayudantia
+   ```
+2. Restaurar dependencias:
+   ```bash
+   dotnet restore
+   ```
+3. Crear y aplicar migraciones:
+  ```bash
+   dotnet ef database update
+  ```
+4. Ejecutar la aplicación:
+   ```bash
+   dotnet run
+  ```
+---
 
-Requisitos previos
+## 🌳 Estructura de Ramas
 
-.NET 9 SDK
+- `main`: versión estable y final de entrega
+- `dev`: integración de nuevas funcionalidades
+- `features/nombre`: ramas para cada funcionalidad independiente
 
-SQLite
+---
 
-Pasos
+## 🔗 Endpoints principales
 
-Clonar el repositorio:
+| Recurso   | Método | Ruta                        | Rol requerido |
+|-----------|--------|-----------------------------|----------------|
+| Productos | GET    | `/products`                 | Público        |
+| Productos | POST   | `/products/create`          | Admin          |
+| Usuarios  | POST   | `/auth/register`            | Público        |
+| Usuarios  | POST   | `/auth/login`               | Público        |
+| Perfil    | GET    | `/user/profile`             | User           |
+| Carrito   | POST   | `/basket?productId=X...`    | User           |
+| Pedidos   | POST   | `/orders`                   | User           |
 
-git clone https://github.com/tuusuario/AYUDANTIAIDWM.git
+> *(Ver colección Postman para el detalle completo de pruebas y flujos)*
 
-Restaurar dependencias:
+---
 
-dotnet restore
+## 🔐 Variables de entorno
 
-Crear y aplicar migraciones:
+Agrega estas claves en tu archivo `appsettings.json` o como variables de entorno:
 
-dotnet ef database update
-
-Ejecutar la aplicación:
-
-dotnet run --project ./Ayudantia/Ayudantia.csproj
-
-La API quedará disponible en:
-
-https://localhost:7088
-
-Estructura de Ramas
-
-main: versión estable y final de entrega
-
-dev: integración de nuevas funcionalidades
-
-features/nombre: ramas para cada funcionalidad independiente
-
-Endpoints principales
-
-Recurso
-
-Método
-
-Ruta
-
-Rol Requerido
-
-Productos
-
-GET
-
-/products
-
-Público
-
-Productos
-
-POST
-
-/products/create
-
-Admin
-
-Usuarios
-
-POST
-
-/auth/register
-
-Público
-
-Usuarios
-
-POST
-
-/auth/login
-
-Público
-
-Perfil
-
-GET
-
-/user/profile
-
-User
-
-Carrito
-
-POST
-
-/basket?productId=X...
-
-User
-
-Pedidos
-
-POST
-
-/orders
-
-User
-
-(Ver Postman Collection para detalle completo de pruebas)
-
-Variables de entorno
-
-Configura las siguientes claves en appsettings.json o mediante entorno:
-
+```json
 "JWT": {
   "SignInKey": "<tu-clave-secreta>",
   "Issuer": "https://localhost:7088",
@@ -153,55 +100,69 @@ Configura las siguientes claves en appsettings.json o mediante entorno:
 "CorsSettings": {
   "AllowedOrigins": ["http://localhost:3000"],
   "AllowedHeaders": ["Content-Type", "Authorization"],
-  "AllowedMethods": ["GET", "POST", "PUT", "DELETE"]
-}
+  "AllowedMethods
+```
+---
 
-Pruebas con Postman
+## 🧪 Pruebas con Postman
 
-Se incluye una colección Postman organizada por recurso (Products, User, Basket, Order), que permite:
+Se incluye una colección Postman organizada por recurso (`Products`, `User`, `Basket`, `Order`), que permite:
 
-Registrar, autenticar y probar flujos como usuario y administrador
+- Registrar y autenticar usuarios
+- Probar flujos como usuario y administrador
+- Crear productos y subir imágenes a Cloudinary
+- Filtrar, ordenar y paginar productos y usuarios
+- Agregar y quitar productos del carrito
+- Crear pedidos y consultar su historial
 
-Agregar productos y subir imágenes
+### 🔧 Variables utilizadas
 
-Filtrar, ordenar y paginar productos y usuarios
+| Variable    | Descripción                          |
+|-------------|--------------------------------------|
+| `{{url}}`   | URL base del backend (ej: https://localhost:7088) |
+| `{{token}}` | Token Bearer obtenido tras el login |
 
-Gestionar el carrito y crear pedidos
+> 📎 Importa la colección `Punto de prueba.postman_collection.json` en Postman y configura las variables antes de testear.
 
-Ver el historial y detalle de pedidos
+---
 
-Variables utilizadas:
+### 🧭 Flujo automatizado sugerido
 
-{{url}}: URL base del backend (ej. https://localhost:7088/)
+| Paso | Descripción                                | Método | Ruta                        | Requiere token |
+|------|--------------------------------------------|--------|-----------------------------|----------------|
+| 1    | Registro de nuevo usuario                  | POST   | `/auth/register`            | ❌              |
+| 2    | Intento de registro duplicado              | POST   | `/auth/register`            | ❌              |
+| 3    | Login y obtención de token                 | POST   | `/auth/login`               | ❌              |
+| 4    | Obtener perfil del usuario autenticado     | GET    | `/user/profile`             | ✅              |
+| 5    | Actualizar dirección de envío              | PUT    | `/user/address`             | ✅              |
+| 6    | Obtener listado de productos públicos      | GET    | `/products`                 | ❌              |
+| 7    | Agregar producto al carrito                | POST   | `/basket?productId=X`       | ✅              |
+| 8    | Ver contenido del carrito                  | GET    | `/basket`                   | ✅              |
+| 9    | Crear pedido desde el carrito              | POST   | `/orders`                   | ✅              |
+| 10   | Ver historial de pedidos                   | GET    | `/orders`                   | ✅              |
+| 11   | Ver detalle de pedido por ID               | GET    | `/orders/{id}`              | ✅              |
 
-{{token}}: token Bearer obtenido tras login
+---
 
-Recuerda importar la colección Punto de prueba.postman_collection.json en tu Postman y configurar las variables adecuadas antes de comenzar a testear.
+## 💬 Convenciones de Commit
 
-Convenciones de Commit
+Se utilizó el estándar **Conventional Commits** para mejorar la trazabilidad del código:
 
-Se utilizó el estándar Conventional Commits:
+- `feat:` nueva funcionalidad
+- `fix:` corrección de errores
+- `refactor:` mejoras internas sin cambio de lógica
+- `docs:` actualizaciones en documentación
+- `test:` adición o mejora de pruebas
 
-feat: nueva funcionalidad
+---
 
-fix: corrección de errores
+## ✅ Validaciones automáticas
 
-refactor: mejoras internas
+Se configuraron Git Hooks con **Husky (.NET)** para ejecutar validaciones previas al commit:
 
-docs: documentación
-
-Validaciones automáticas
-
-Se configuraron Git Hooks con Husky (.NET) para ejecutar:
-
+```bash
 dotnet format
-
 dotnet build
-
-dotnet list ... --outdated
-
+dotnet list ./Ayudantia/Ayudantia.csproj package --outdated
 dotnet ef migrations script
-
-Licencia
-
-Este proyecto es parte de una entrega universitaria y no debe usarse con fines comerciales sin autorización.
+```
