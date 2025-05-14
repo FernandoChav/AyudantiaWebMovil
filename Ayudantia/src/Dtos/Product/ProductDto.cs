@@ -33,7 +33,7 @@ namespace Ayudantia.Src.Dtos
         public int Stock { get; set; }
 
         [Required]
-        
+
         public List<IFormFile> Images { get; set; } = [];
     }
 }

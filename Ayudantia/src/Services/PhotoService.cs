@@ -41,7 +41,7 @@ namespace Ayudantia.Src.Services
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
-                Folder = "products" 
+                Folder = "products"
             };
 
             ImageUploadResult? uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -55,7 +55,7 @@ namespace Ayudantia.Src.Services
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
             if (result.Result == "not found")
-                return new DeletionResult { Result = "ok" }; 
+                return new DeletionResult { Result = "ok" };
 
             return result;
         }
