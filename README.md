@@ -55,16 +55,14 @@ Permite gestionar productos, usuarios, pedidos y carrito de compras mediante una
 4. Ejecutar la aplicación:
    ```bash
    dotnet run
-  ```
----
-
+  
 ## 🌳 Estructura de Ramas
 
 - `main`: versión estable y final de entrega
 - `dev`: integración de nuevas funcionalidades
 - `features/nombre`: ramas para cada funcionalidad independiente
 
----
+
 
 ## 🔗 Endpoints principales
 
