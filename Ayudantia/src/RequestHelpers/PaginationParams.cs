@@ -7,10 +7,10 @@ namespace Ayudantia.Src.RequestHelpers
 {
     public class PaginationParams
     {
-        private const int MaxPageSize = 50;
+        private const int MaxPageSize = 20;
 
         public int PageNumber { get; set; } = 1;       // <-- requerido por ToPagedList
-        private int _pageSize = 8;
+        private int _pageSize = 20;
 
         public int PageSize                           // <-- requerido por ToPagedList
         {
