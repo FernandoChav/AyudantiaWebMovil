@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Dtos.ShippingAddress;
 using Ayudantia.Src.Dtos.User;
 using Ayudantia.Src.Extensions;
 using Ayudantia.Src.Helpers;
@@ -95,21 +96,30 @@ namespace Ayudantia.Src.Controllers
             if (userId == null)
                 return Unauthorized(new ApiResponse<string>(false, "Usuario no autenticado"));
 
+            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            if (user is null)
+                return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
             var existing = await _unitOfWork.ShippingAddressRepository.GetByUserIdAsync(userId);
-            if (existing != null)
-                return BadRequest(new ApiResponse<string>(false, "Ya tienes una dirección registrada"));
+            var hasExistingData = existing != null && !string.IsNullOrWhiteSpace(existing.Street) &&
+                !string.IsNullOrWhiteSpace(existing.Number) &&
+                !string.IsNullOrWhiteSpace(existing.Commune) &&
+                !string.IsNullOrWhiteSpace(existing.Region) &&
+                !string.IsNullOrWhiteSpace(existing.PostalCode);
+
+            if (hasExistingData)
+                return BadRequest(new ApiResponse<string>(false, "Ya tienes una dirección registrada válida"));
 
             var address = ShippingAddressMapper.FromDto(dto, userId);
 
             await _unitOfWork.ShippingAddressRepository.AddAsync(address);
             await _unitOfWork.SaveChangeAsync();
-
-            return Ok(new ApiResponse<ShippingAddres>(true, "Dirección creada exitosamente", address));
+            var addressDto = ShippingAddressMapper.ToDto(address);
+            return Ok(new ApiResponse<ShippingAddressDto>(true, "Dirección creada exitosamente", addressDto));
         }
 
 
         [Authorize(Roles = "User")]
-        [HttpPut("profile")]
+        [HttpPatch("profile")]
         public async Task<ActionResult<ApiResponse<UserDto>>> UpdateProfile([FromBody] UpdateProfileDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -120,9 +130,7 @@ namespace Ayudantia.Src.Controllers
             if (user is null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
-            user.FirtsName = dto.FirtsName;
-            user.LastName = dto.LastName;
-            user.Thelephone = dto.Phone ?? string.Empty;
+            UserMapper.UpdateUserFromDto(user, dto);
 
             await _unitOfWork.UserRepository.UpdateUserAsync(user);
             await _unitOfWork.SaveChangeAsync();
@@ -146,7 +154,7 @@ namespace Ayudantia.Src.Controllers
                 return BadRequest(new ApiResponse<string>(false, "La nueva contraseña y la confirmación no coinciden"));
             if (dto.NewPassword == dto.CurrentPassword) return BadRequest(new ApiResponse<string>(false, "La nueva contraseña no puede ser igual a la actual"));
 
-            var result = await _unitOfWork.UserRepository.UpdatePasswordAsync(user,dto.CurrentPassword, dto.NewPassword);
+            var result = await _unitOfWork.UserRepository.UpdatePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
             if (!result.Succeeded)
             {
                 return BadRequest(new ApiResponse<string>(

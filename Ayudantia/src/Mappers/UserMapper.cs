@@ -24,6 +24,7 @@ namespace Ayudantia.Src.Mappers
                 Thelephone = dto.Thelephone,
                 RegisteredAt = DateTime.UtcNow,
                 IsActive = true,
+                BirthDate = dto.BirthDate,
                 ShippingAddres = new ShippingAddres
                 {
                     Street = dto.Street ?? string.Empty,
@@ -47,7 +48,8 @@ namespace Ayudantia.Src.Mappers
                 PostalCode = user.ShippingAddres?.PostalCode,
                 RegisteredAt = user.RegisteredAt,
                 LastAccess = user.LastAccess,
-                IsActive = user.IsActive
+                IsActive = user.IsActive,
+                BirthDate = user.BirthDate
             };
         public static AuthenticatedUserDto UserToAuthenticatedDto(User user, string token) =>
             new()
@@ -69,9 +71,21 @@ namespace Ayudantia.Src.Mappers
             };
         public static void UpdateUserFromDto(User user, UpdateProfileDto dto)
         {
-            user.FirtsName = dto.FirtsName;
-            user.LastName = dto.LastName;
-            user.Thelephone = dto.Phone ?? string.Empty;
+            if (dto.FirtsName is not null)
+                user.FirtsName = dto.FirtsName;
+
+            if (dto.LastName is not null)
+                user.LastName = dto.LastName;
+
+            if (dto.Email is not null)
+                user.Email = dto.Email;
+
+            if (dto.Phone is not null)
+                user.Thelephone = dto.Phone;
+
+            if (dto.BirthDate.HasValue)
+                user.BirthDate = dto.BirthDate.Value;
         }
+        
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using API.middleware;
 
 using Ayudantia.Src.Data;
+using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Models;
 using Ayudantia.Src.Repositories;
@@ -24,7 +25,12 @@ try
 
     // creacion de patron del builder de .net para crear la aplicacion
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+    });
+    
     builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -34,6 +40,10 @@ try
     builder.Services.AddScoped<ITokenServices, TokenService>();
     builder.Services.AddScoped<IPhotoService, PhotoService>();
     builder.Services.AddScoped<UnitOfWork>();
+    builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+    {
+        options.SerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+    });
     builder.Services.AddIdentity<User, IdentityRole>(opt =>
     {
         opt.User.RequireUniqueEmail = true;

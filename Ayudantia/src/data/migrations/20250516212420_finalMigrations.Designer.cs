@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ayudantia.Src.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20250513155745_finalMigrations")]
+    [Migration("20250516212420_finalMigrations")]
     partial class finalMigrations
     {
         /// <inheritdoc />
@@ -134,6 +134,9 @@ namespace Ayudantia.Src.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Condition")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -207,6 +210,9 @@ namespace Ayudantia.Src.Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
