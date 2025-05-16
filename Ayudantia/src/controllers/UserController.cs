@@ -131,7 +131,7 @@ namespace Ayudantia.Src.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpPut("profile/password")]
+        [HttpPatch("profile/password")]
         public async Task<ActionResult<ApiResponse<string>>> ChangePassword([FromBody] ChangePasswordDto dto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -146,7 +146,7 @@ namespace Ayudantia.Src.Controllers
                 return BadRequest(new ApiResponse<string>(false, "La nueva contraseña y la confirmación no coinciden"));
             if (dto.NewPassword == dto.CurrentPassword) return BadRequest(new ApiResponse<string>(false, "La nueva contraseña no puede ser igual a la actual"));
 
-            var result = await _unitOfWork.UserRepository.UpdatePasswordAsync(user, dto.NewPassword);
+            var result = await _unitOfWork.UserRepository.UpdatePasswordAsync(user,dto.CurrentPassword, dto.NewPassword);
             if (!result.Succeeded)
             {
                 return BadRequest(new ApiResponse<string>(
