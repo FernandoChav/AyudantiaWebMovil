@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Ayudantia.Src.Models;
+
 namespace Ayudantia.Src.Dtos
 {
     public class ProductDto
@@ -35,5 +37,6 @@ namespace Ayudantia.Src.Dtos
         [Required]
 
         public List<IFormFile> Images { get; set; } = [];
+        public ProductCondition Condition { get; set; } = ProductCondition.Nuevo;
     }
 }

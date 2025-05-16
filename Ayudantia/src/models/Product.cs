@@ -20,6 +20,7 @@ namespace Ayudantia.Src.Models
 
         public string? PublicId { get; set; }
         public bool IsActive { get; set; } = true;
+        public ProductCondition Condition { get; set; } = ProductCondition.Nuevo;
 
     }
 }

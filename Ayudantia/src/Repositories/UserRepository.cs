@@ -53,7 +53,7 @@ namespace Ayudantia.Src.Repositories
                 return result == PasswordVerificationResult.Success;
             });
         }
-        public async Task<IdentityResult> UpdatePasswordAsync(User user,string currentPassword, string newPassword)
+        public async Task<IdentityResult> UpdatePasswordAsync(User user, string currentPassword, string newPassword)
         => await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
 
 
@@ -62,6 +62,6 @@ namespace Ayudantia.Src.Repositories
             throw new NotImplementedException();
         }
 
-       
+
     }
 }
