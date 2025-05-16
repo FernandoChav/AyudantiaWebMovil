@@ -72,15 +72,22 @@ namespace Ayudantia.Src.Controllers
 
         [Authorize(Roles = "Admin")]
         // PUT /users/{id}/status
-        [HttpPut("{email}/status")]
+        [HttpPatch("{email}/status")]
         public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string email, [FromBody] ToggleStatusDto dto)
         {
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
-            user.IsActive = !user.IsActive;
-            user.DeactivationReason = user.IsActive ? null : dto.Reason;
+            var roles = await _unitOfWork.UserRepository.GetUserRolesAsync(user);
+            if (roles.Contains("Admin", StringComparer.OrdinalIgnoreCase))
+            {
+                return BadRequest(new ApiResponse<string>(
+                    false,
+                    "No se puede deshabilitar una cuenta con rol de administrador."
+                ));
+            }
+
 
             await _unitOfWork.UserRepository.UpdateUserAsync(user);
             await _unitOfWork.SaveChangeAsync();

@@ -86,6 +86,6 @@ namespace Ayudantia.Src.Mappers
             if (dto.BirthDate.HasValue)
                 user.BirthDate = dto.BirthDate.Value;
         }
-        
+
     }
 }

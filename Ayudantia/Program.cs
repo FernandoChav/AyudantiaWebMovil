@@ -30,7 +30,7 @@ try
     {
         options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     });
-    
+
     builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();

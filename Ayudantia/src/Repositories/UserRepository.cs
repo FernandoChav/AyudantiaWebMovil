@@ -61,7 +61,10 @@ namespace Ayudantia.Src.Repositories
         {
             throw new NotImplementedException();
         }
-
+        public async Task<IList<string>> GetUserRolesAsync(User user)
+        {
+            return await _userManager.GetRolesAsync(user);
+        }
 
     }
 }
