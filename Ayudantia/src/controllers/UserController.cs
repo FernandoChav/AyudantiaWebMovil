@@ -58,9 +58,9 @@ namespace Ayudantia.Src.Controllers
             return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
         }
         [Authorize(Roles = "Admin")]
-        // GET /users/{id}
+        
         [HttpGet("{email}")]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string email)
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string? email , string? name)
         {
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
@@ -71,7 +71,6 @@ namespace Ayudantia.Src.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        // PUT /users/{id}/status
         [HttpPatch("{email}/status")]
         public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string email, [FromBody] ToggleStatusDto dto)
         {
@@ -88,13 +87,15 @@ namespace Ayudantia.Src.Controllers
                 ));
             }
 
-
+            user.IsActive = !user.IsActive;
             await _unitOfWork.UserRepository.UpdateUserAsync(user);
             await _unitOfWork.SaveChangeAsync();
 
             var message = user.IsActive ? "Usuario habilitado correctamente" : "Usuario deshabilitado correctamente";
             return Ok(new ApiResponse<string>(true, message));
         }
+
+        
         [Authorize(Roles = "User")]
         [HttpPost("address")]
         public async Task<ActionResult<ApiResponse<ShippingAddres>>> CreateShippingAddress([FromBody] CreateShippingAddressDto dto)
