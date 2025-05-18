@@ -1,0 +1,978 @@
+{
+	"info": {
+		"_postman_id": "880d7998-03a5-48b4-b223-4c5cdd44b00b",
+		"name": "Punto de prueba",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34959422"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get",
+					"item": [
+						{
+							"name": "Obtener todos los productos",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// Validar código de estado esperado\r",
+											"pm.test(\"Código de estado es 200 o 204\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r",
+											"});\r",
+											"\r",
+											"// Validar estructura del JSON de éxito\r",
+											"const json = pm.response.json();\r",
+											"pm.test(\"Respuesta tiene success, message y data\", function () {\r",
+											"    pm.expect(json).to.have.property(\"success\", true);\r",
+											"    pm.expect(json).to.have.property(\"message\");\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}Product",
+									"host": [
+										"{{url}}Product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener producto por ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}Product/10",
+									"host": [
+										"{{url}}Product"
+									],
+									"path": [
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar por nombre o descripción",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?search=Redragon}",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "Redragon}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filtrar por marcas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?brands=Logitech",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "brands",
+											"value": "Logitech"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filtrar por categorías",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?categories=peripherals",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "categories",
+											"value": "peripherals"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ordenar resultados ascendente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?orderBy=price",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "orderBy",
+											"value": "price"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ordenar resultados decendente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?orderBy=-price",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "orderBy",
+											"value": "-price"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Paginacion",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product?pageNumber=1&pageSize=7",
+									"host": [
+										"{{url}}product"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "7"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener perfil",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user/profile",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "Crear producto",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Logitech G502",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "El mouse G502 es todo un icono que ha ocupado las primeras posiciones de las listas generación tras generación. Y es el mouse que eligen quienes juegan en serio. Ahora, el mouse G502 se une a las filas de los mouse inalámbricos para juegos más avanzados del mundo con el lanzamiento de G502 LIGHTSPEED. LIGHTSPEED es una tecnología ultrarrápida y confiable ",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "119.990",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "Peripherals",
+											"type": "text"
+										},
+										{
+											"key": "stock",
+											"value": "10",
+											"type": "text"
+										},
+										{
+											"key": "brand",
+											"value": "Logitech",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/Ferna/Downloads/g502 1.jpeg"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/Ferna/Downloads/g 502 2.jpeg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}product/create",
+									"host": [
+										"{{url}}product"
+									],
+									"path": [
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Put",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Logitech G502",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "El mouse G502 es todo un icono que ha ocupado las primeras posiciones de las listas generación tras generación. Y es el mouse que eligen quienes juegan en serio. Ahora, el mouse G502 se une a las filas de los mouse inalámbricos para juegos más avanzados del mundo con el lanzamiento de G502 LIGHTSPEED. LIGHTSPEED es una tecnología ultrarrápida y confiable ",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "119.990",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "Peripherals",
+											"type": "text"
+										},
+										{
+											"key": "stock",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "brand",
+											"value": "Logitech",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/Ferna/Downloads/g 502 3.jpeg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}product/12",
+									"host": [
+										"{{url}}product"
+									],
+									"path": [
+										"12"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}product/11",
+									"host": [
+										"{{url}}product"
+									],
+									"path": [
+										"11"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firtsName\": \"Yerko2\",\r\n    \"lastName\": \"Castillos\",\r\n    \"email\": \"yerkos@gmail.com\",\r\n    \"thelephone\": \"+56957519245\",\r\n    \"password\": \"StrongPassword123!\",\r\n    \"confirmPassword\": \"StrongPassword123!\",\r\n    \"street\": \"Calle Falsa\",\r\n    \"number\": \"123\",\r\n    \"commune\": \"Springfield\",\r\n    \"region\": \"Springfield Region\",\r\n    \"postalCode\": \"1234567\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}Auth/register",
+									"host": [
+										"{{url}}Auth"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"yerkos@gmail.com\",\r\n  \"password\": \"StrongPassword123!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}Auth/login",
+									"host": [
+										"{{url}}Auth"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login Admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\r\n{\r\n  \"email\": \"ignacio.mancilla@gmail.com\",\r\n  \"password\": \"Pa$$word2025\"\r\n}\r\n    \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}Auth/login",
+									"host": [
+										"{{url}}Auth"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get",
+					"item": [
+						{
+							"name": "Obtener todos los usuarios sin filtros",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}User",
+									"host": [
+										"{{url}}User"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filtrar por estado (activos o inactivos)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user?isActive=true",
+									"host": [
+										"{{url}}user"
+									],
+									"query": [
+										{
+											"key": "isActive",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar por nombre, apellido o correo (filtro de texto)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}User?searchTerm=@alumnos",
+									"host": [
+										"{{url}}User"
+									],
+									"query": [
+										{
+											"key": "searchTerm",
+											"value": "@alumnos"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filtrar por fecha de registro desde una fecha específica",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user?registeredFrom=2025-05-06",
+									"host": [
+										"{{url}}user"
+									],
+									"query": [
+										{
+											"key": "registeredFrom",
+											"value": "2025-05-06"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Paginación simple (ej. página 2, 5 usuarios por página)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user?pageNumber=2&pageSize=5",
+									"host": [
+										"{{url}}user"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "2"
+										},
+										{
+											"key": "pageSize",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ordenar por fecha de registro descendente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user?orderBy=registeredDesc",
+									"host": [
+										"{{url}}user"
+									],
+									"query": [
+										{
+											"key": "orderBy",
+											"value": "registeredDesc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET /user/{email}",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user/Jacinto.Mills21@gmail.com",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"Jacinto.Mills21@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "actualizar estado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"reason\": \"Infracción a las normas\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/Jacinto.Mills21@gmail.com/status",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"Jacinto.Mills21@gmail.com",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar direccion de envio",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Street\": \"Eleutreio Ramirez\",\r\n    \"Number\" : \"2949\",\r\n    \"Commune\" : \"Calama\",\r\n    \"Region\" : \"Antofagasta\",\r\n    \"PostalCode\" : \"1390000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/address",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"address"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Basket",
+			"item": [
+				{
+					"name": "Get Basket",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Basket",
+							"host": [
+								"{{url}}Basket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar un producto al carrito",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}basket?productId=10&quantity=2",
+							"host": [
+								"{{url}}basket"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "10"
+								},
+								{
+									"key": "quantity",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un producto del carrio",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}basket?productId=10&quantity=1",
+							"host": [
+								"{{url}}basket"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "10"
+								},
+								{
+									"key": "quantity",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Crear una orden",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}order",
+							"host": [
+								"{{url}}order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener todas las ordenes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_user}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}order",
+							"host": [
+								"{{url}}order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener una orden por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}Order/1",
+							"host": [
+								"{{url}}Order"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

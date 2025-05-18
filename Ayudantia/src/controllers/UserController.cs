@@ -58,9 +58,9 @@ namespace Ayudantia.Src.Controllers
             return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
         }
         [Authorize(Roles = "Admin")]
-        
+
         [HttpGet("{email}")]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string? email , string? name)
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string? email, string? name)
         {
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
@@ -95,7 +95,7 @@ namespace Ayudantia.Src.Controllers
             return Ok(new ApiResponse<string>(true, message));
         }
 
-        
+
         [Authorize(Roles = "User")]
         [HttpPost("address")]
         public async Task<ActionResult<ApiResponse<ShippingAddres>>> CreateShippingAddress([FromBody] CreateShippingAddressDto dto)
