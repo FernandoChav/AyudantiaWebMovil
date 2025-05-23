@@ -27,29 +27,54 @@ namespace Ayudantia.Src.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(new ApiResponse<string>(false, "Datos inválidos", null, ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()));
-
-                var user = UserMapper.RegisterToUser(newUser);
-                if (string.IsNullOrEmpty(newUser.Password) || string.IsNullOrEmpty(newUser.ConfirmPassword))
                 {
-                    return BadRequest(new ApiResponse<string>(false, "La contraseña y la confirmación son requeridas"));
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+
+                    return BadRequest(new ApiResponse<string>(
+                        false,
+                        "Datos inválidos",
+                        null,
+                        errors));
                 }
 
+                if (string.IsNullOrWhiteSpace(newUser.Password) || string.IsNullOrWhiteSpace(newUser.ConfirmPassword))
+                    return BadRequest(new ApiResponse<string>(false, "La contraseña y la confirmación son requeridas"));
+
+                if (newUser.Password != newUser.ConfirmPassword)
+                    return BadRequest(new ApiResponse<string>(false, "Las contraseñas no coinciden"));
+
+                var existingUser = await _userManager.FindByEmailAsync(newUser.Email);
+                if (existingUser != null)
+                    return Conflict(new ApiResponse<string>(false, "Ya existe una cuenta con este correo electrónico"));
+
+                var user = UserMapper.RegisterToUser(newUser);
                 var createUser = await _userManager.CreateAsync(user, newUser.Password);
 
                 if (!createUser.Succeeded)
                 {
-                    return BadRequest(new ApiResponse<string>(false, "Error al crear el usuario", null, createUser.Errors.Select(e => e.Description).ToList()));
+                    var identityErrors = createUser.Errors.Select(e => e.Description).ToList();
+                    return BadRequest(new ApiResponse<string>(
+                        false,
+                        "Error al crear el usuario",
+                        null,
+                        identityErrors));
                 }
 
-                var roleUser = await _userManager.AddToRoleAsync(user, "User");
-                if (!roleUser.Succeeded)
+                var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                if (!roleResult.Succeeded)
                 {
-                    return StatusCode(500, new ApiResponse<string>(false, "Error al asignar el rol", null, roleUser.Errors.Select(e => e.Description).ToList()));
+                    var roleErrors = roleResult.Errors.Select(e => e.Description).ToList();
+                    return StatusCode(500, new ApiResponse<string>(
+                        false,
+                        "Error al asignar el rol al usuario",
+                        null,
+                        roleErrors));
                 }
 
                 var userDto = UserMapper.UserToNewUserDto(user);
-
                 return Ok(new ApiResponse<NewUserDto>(true, "Usuario registrado exitosamente", userDto));
             }
             catch (Exception ex)
@@ -57,6 +82,7 @@ namespace Ayudantia.Src.Controllers
                 return StatusCode(500, new ApiResponse<string>(false, "Error interno del servidor", null, new List<string> { ex.Message }));
             }
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
