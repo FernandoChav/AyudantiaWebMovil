@@ -65,6 +65,11 @@ namespace Ayudantia.Src.Repositories
         {
             return await _userManager.GetRolesAsync(user);
         }
-
+        public Task<User?> GetUserByNameAsync(string name)
+        {
+            return _userManager.Users
+                .Include(u => u.ShippingAddres)
+                .FirstOrDefaultAsync(u => u.FirtsName.ToLower().Trim() == name.ToLower().Trim());
+        }
     }
 }

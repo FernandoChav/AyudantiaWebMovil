@@ -58,11 +58,16 @@ namespace Ayudantia.Src.Controllers
             return Ok(new ApiResponse<IEnumerable<UserDto>>(true, "Usuarios obtenidos correctamente", dtos));
         }
         [Authorize(Roles = "Admin")]
-        // GET /users/{id}
-        [HttpGet("{email}")]
-        public async Task<ActionResult<ApiResponse<UserDto>>> GetById(string email)
+        [HttpGet("find")]
+        public async Task<ActionResult<ApiResponse<UserDto>>> GetById([FromQuery] string? email, [FromQuery] string? name)
         {
-            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
+            User? user = null;
+
+            if (!string.IsNullOrEmpty(email))
+                user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
+            else if (!string.IsNullOrEmpty(name))
+                user = await _unitOfWork.UserRepository.GetUserByNameAsync(name);
+
             if (user == null)
                 return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
@@ -70,31 +75,7 @@ namespace Ayudantia.Src.Controllers
             return Ok(new ApiResponse<UserDto>(true, "Usuario encontrado", dto));
         }
 
-        [Authorize(Roles = "Admin")]
-        // PUT /users/{id}/status
-        [HttpPatch("{email}/status")]
-        public async Task<ActionResult<ApiResponse<string>>> ToggleStatus(string email, [FromBody] ToggleStatusDto dto)
-        {
-            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
-            if (user == null)
-                return NotFound(new ApiResponse<string>(false, "Usuario no encontrado"));
 
-            var roles = await _unitOfWork.UserRepository.GetUserRolesAsync(user);
-            if (roles.Contains("Admin", StringComparer.OrdinalIgnoreCase))
-            {
-                return BadRequest(new ApiResponse<string>(
-                    false,
-                    "No se puede deshabilitar una cuenta con rol de administrador."
-                ));
-            }
-
-
-            await _unitOfWork.UserRepository.UpdateUserAsync(user);
-            await _unitOfWork.SaveChangeAsync();
-
-            var message = user.IsActive ? "Usuario habilitado correctamente" : "Usuario deshabilitado correctamente";
-            return Ok(new ApiResponse<string>(true, message));
-        }
         [Authorize(Roles = "User")]
         [HttpPost("address")]
         public async Task<ActionResult<ApiResponse<ShippingAddres>>> CreateShippingAddress([FromBody] CreateShippingAddressDto dto)
