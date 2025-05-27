@@ -1,2 +1,0 @@
-cd Ayudantia
-dotnet build
