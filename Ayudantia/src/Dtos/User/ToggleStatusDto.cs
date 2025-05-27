@@ -9,6 +9,10 @@ namespace Ayudantia.Src.Dtos
     public class ToggleStatusDto
     {
         [StringLength(255)]
-        public string? Reason { get; set; }
+        [Required(ErrorMessage = "El motivo es obligatorio.")]
+        public string Reason { get; set; } = string.Empty;
+        [EmailAddress(ErrorMessage = "El formato del correo electrónico no es válido.")]
+        [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
+        public string Email { get; set; } = string.Empty;
     }
 }

@@ -39,7 +39,7 @@ namespace Ayudantia.Src.Controllers
                         null,
                         errors));
                 }
-
+                
                 if (string.IsNullOrWhiteSpace(newUser.Password) || string.IsNullOrWhiteSpace(newUser.ConfirmPassword))
                     return BadRequest(new ApiResponse<string>(false, "La contraseña y la confirmación son requeridas"));
 

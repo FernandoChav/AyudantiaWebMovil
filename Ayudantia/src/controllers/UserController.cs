@@ -14,6 +14,8 @@ using Ayudantia.Src.Mappers;
 using Ayudantia.Src.Models;
 using Ayudantia.Src.RequestHelpers;
 
+using Bogus.Extensions.UnitedKingdom;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +75,28 @@ namespace Ayudantia.Src.Controllers
 
             var dto = UserMapper.UserToUserDto(user);
             return Ok(new ApiResponse<UserDto>(true, "Usuario encontrado", dto));
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("toggle-status")]
+        public async Task<ActionResult<ApiResponse<string>>> ToggleUserStatus([FromBody] ToggleStatusDto dto)
+        {
+            var idAdmin = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(idAdmin))
+                return Unauthorized(new ApiResponse<string>(false, "No se pudo identificar al administrador."));
+
+            var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(dto.Email);
+            if (user == null)
+                return NotFound(new ApiResponse<string>(false, "Usuario no encontrado."));
+            if (user.Id.ToString() == idAdmin)
+                return BadRequest(new ApiResponse<string>(false, "No puedes modificar el estado de tu propia cuenta Administrador."));
+            user.IsActive = !user.IsActive;
+            user.DeactivationReason = dto.Reason;
+
+
+            await _unitOfWork.SaveChangeAsync();
+
+            var estado = user.IsActive ? "habilitado" : "deshabilitado";
+            return Ok(new ApiResponse<string>(true, $"Usuario {estado} exitosamente."));
         }
 
 

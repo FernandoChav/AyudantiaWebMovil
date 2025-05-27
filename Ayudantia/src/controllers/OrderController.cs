@@ -37,27 +37,33 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
 
         var order = OrderMapper.FromBasket(basket, userId, address.Id);
 
-        // Reducir el stock
+        // Validar y reducir stock
         foreach (var item in order.Items)
         {
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(item.ProductId);
-            if (product != null)
-            {
-                product.Stock -= item.Quantity;
+            if (product == null)
+                return BadRequest(new ApiResponse<string>(false, $"Producto con ID {item.ProductId} no encontrado."));
 
-                if (product.Stock < 0)
-                    return BadRequest(new ApiResponse<string>(false, $"No hay suficiente stock para el producto {product.Name}"));
-                if (product.Stock == 0)
-                    product.IsActive = false;
-            }
+            product.Stock -= item.Quantity;
+
+            if (product.Stock < 0)
+                return BadRequest(new ApiResponse<string>(false, $"No hay suficiente stock para el producto {product.Name}"));
+            if (product.Stock == 0)
+                product.IsActive = false;
         }
 
         await _unitOfWork.OrderRepository.CreateOrderAsync(order);
         _unitOfWork.BasketRepository.DeleteBasket(basket);
         await _unitOfWork.SaveChangeAsync();
 
+        // 🔁 Cargar productos para el mapeo completo con imagenes
+        var productIds = order.Items.Select(i => i.ProductId).ToList();
+        var products = await _unitOfWork.ProductRepository.GetProductsByIdsAsync(productIds);
+        var productDict = products.ToDictionary(p => p.Id);
 
-        return Ok(new ApiResponse<OrderDto>(true, "Pedido realizado correctamente", OrderMapper.ToOrderDto(order)));
+        var dto = OrderMapper.ToOrderDto(order, productDict);
+
+        return Ok(new ApiResponse<OrderDto>(true, "Pedido realizado correctamente", dto));
     }
 
 
@@ -87,6 +93,12 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
         if (order == null)
             return NotFound(new ApiResponse<OrderDto>(false, "Pedido no encontrado"));
 
-        return Ok(new ApiResponse<OrderDto>(true, "Pedido encontrado", OrderMapper.ToOrderDto(order)));
+        var productIds = order.Items.Select(i => i.ProductId).ToList();
+        var products = await _unitOfWork.ProductRepository.GetProductsByIdsAsync(productIds);
+        var productDict = products.ToDictionary(p => p.Id);
+
+        var dto = OrderMapper.ToOrderDto(order, productDict);
+
+        return Ok(new ApiResponse<OrderDto>(true, "Pedido encontrado", dto));
     }
 }

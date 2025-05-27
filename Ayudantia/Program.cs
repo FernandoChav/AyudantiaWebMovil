@@ -13,6 +13,7 @@ using Ayudantia.Src.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -44,6 +45,28 @@ try
     {
         options.SerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     });
+    builder.Services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
+                );
+
+            var problemDetails = new ValidationProblemDetails(errors)
+            {
+                Title = "Uno o más errores de validación ocurrieron.",
+                Status = StatusCodes.Status400BadRequest,
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1"
+            };
+
+            return new BadRequestObjectResult(problemDetails);
+        };
+    });
+
     builder.Services.AddIdentity<User, IdentityRole>(opt =>
     {
         opt.User.RequireUniqueEmail = true;

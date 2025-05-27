@@ -15,16 +15,17 @@ namespace Ayudantia.Src.Mappers
             return new BasketDto
             {
                 BasketId = basket.BasketId,
-                Items = [.. basket.Items.Select(x => new BasketItemDto
+                Items = basket.Items.Select(i => new BasketItemDto
                 {
-                    ProductId = x.ProductId,
-                    Name = x.Product.Name,
-                    Price = x.Product.Price,
-                    PictureUrl = x.Product.Urls?.FirstOrDefault() ?? string.Empty,
-                    Brand = x.Product.Brand,
-                    Category = x.Product.Category,
-                    Quantity = x.Quantity
-                })]
+                    ProductId = i.ProductId,
+                    Name = i.Product.Name,
+                    Price = i.Product.Price,
+                    PictureUrl = i.Product.Urls != null && i.Product.Urls.Any() ? i.Product.Urls.First() : null,
+                    Quantity = i.Quantity,
+                    Brand = i.Product.Brand,
+                    Category = i.Product.Category
+                }).ToList(),
+                TotalPrice = (double)basket.Items.Sum(i => i.Quantity * i.Product.Price) // ✅ TOTAL
             };
         }
     }

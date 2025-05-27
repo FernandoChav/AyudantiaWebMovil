@@ -32,7 +32,9 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
 
         query = query.Search(productParams.Search)
                      .Filter(productParams.Brands, productParams.Categories)
-                     .Sort(productParams.OrderBy);
+                     .Sort(productParams.OrderBy)
+                     .FilterByCondition(productParams.Conditions)
+                     .FilterByPrice(productParams.MinPrice, productParams.MaxPrice);
 
         var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
 
@@ -96,7 +98,7 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
         );
     }
     [Authorize(Roles = "Admin")]
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<ActionResult<ApiResponse<Product>>> Update(int id, [FromForm] ProductDto dto)
     {
         var product = await _context.ProductRepository.GetProductByIdAsync(id);

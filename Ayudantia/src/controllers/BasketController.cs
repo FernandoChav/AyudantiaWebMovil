@@ -46,6 +46,8 @@ namespace Ayudantia.Src.Controllers
             }
 
             var product = await _unitOfWork.ProductRepository.GetProductByIdAsync(productId);
+            var existingItem = basket.Items.FirstOrDefault(i => i.ProductId == productId);
+            var totalDesired = quantity + (existingItem?.Quantity ?? 0);
             if (product == null)
                 return BadRequest(new ApiResponse<string>(false, "Producto no encontrado"));
 
@@ -57,7 +59,11 @@ namespace Ayudantia.Src.Controllers
 
             if (product.Stock < quantity)
                 return BadRequest(new ApiResponse<string>(false, $"Solo hay {product.Stock} unidades disponibles de '{product.Name}'"));
-
+            if (product.Stock < totalDesired)
+            {
+                return BadRequest(new ApiResponse<string>(false,
+                    $"Solo hay {product.Stock} unidades disponibles de '{product.Name}'. Ya tienes {existingItem?.Quantity ?? 0} en el carrito."));
+            }
             basket.AddItem(product, quantity);
 
             var changes = await _unitOfWork.SaveChangeAsync();
@@ -75,7 +81,12 @@ namespace Ayudantia.Src.Controllers
             var basket = await RetrieveBasket();
             if (basket == null)
                 return BadRequest(new ApiResponse<string>(false, "Carrito no encontrado"));
-
+            if (quantity <= 0)
+                return BadRequest(new ApiResponse<string>(false, "La cantidad debe ser mayor a 0"));
+            if (!basket.Items.Any(i => i.ProductId == productId))
+                return BadRequest(new ApiResponse<string>(false, "El producto no está en el carrito"));
+            if (quantity > basket.Items.First(i => i.ProductId == productId).Quantity)
+                return BadRequest(new ApiResponse<string>(false, "No puedes eliminar más productos de los que hay en el carrito"));
             basket.RemoveItem(productId, quantity);
 
             var success = await _unitOfWork.SaveChangeAsync() > 0;

@@ -10,5 +10,7 @@ namespace Ayudantia.Src.Dtos
         public required string BasketId { get; set; }
 
         public List<BasketItemDto> Items { get; set; } = [];
+
+        public double TotalPrice {get; set; }
     }
 }

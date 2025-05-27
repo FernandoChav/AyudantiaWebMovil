@@ -27,21 +27,25 @@ namespace Ayudantia.Src.Mappers
             };
         }
 
-        public static OrderDto ToOrderDto(Order order)
+        public static OrderDto ToOrderDto(Order order, Dictionary<int, Product> productCache)
         {
             return new OrderDto
             {
                 Id = order.Id,
                 CreatedAt = order.OrderDate,
-                Address = order.ShippingAddress,
+                Address = ShippingAddressMapper.ToDto(order.ShippingAddress),
                 Total = (int)Math.Floor(order.Total),
-                Items = order.Items.Select(i => new OrderItemDto
+                Items = order.Items.Select(item =>
                 {
-                    ProductId = i.ProductId,
-                    Name = i.ProductName,
-                    Quantity = i.Quantity,
-                    Price = (int)Math.Floor(i.Price),
-                    ImageUrl = "" // Puedes ajustar si decides guardar o mapear imágenes
+                    var product = productCache.GetValueOrDefault(item.ProductId);
+                    return new OrderItemDto
+                    {
+                        ProductId = item.ProductId,
+                        Name = item.ProductName,
+                        Quantity = item.Quantity,
+                        Price = (int)Math.Floor(item.Price),
+                        ImageUrl = product?.Urls?.FirstOrDefault() ?? ""
+                    };
                 }).ToList()
             };
         }

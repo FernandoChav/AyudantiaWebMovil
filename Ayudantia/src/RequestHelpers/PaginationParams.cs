@@ -10,7 +10,7 @@ namespace Ayudantia.Src.RequestHelpers
         private const int MaxPageSize = 20;
 
         public int PageNumber { get; set; } = 1;       // <-- requerido por ToPagedList
-        private int _pageSize = 20;
+        private int _pageSize = 10;
 
         public int PageSize                           // <-- requerido por ToPagedList
         {

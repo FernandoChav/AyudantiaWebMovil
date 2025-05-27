@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Ayudantia.Src.Helpers;
+
 namespace Ayudantia.Src.Dtos
 {
     public class RegisterDto
@@ -28,6 +30,7 @@ namespace Ayudantia.Src.Dtos
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]|\\:;\""<>,.?/~`]).+$",
         ErrorMessage = "La contraseña debe tener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.")]
         public required string ConfirmPassword { get; set; }
+        [BirthDateValidation(ErrorMessage = "La fecha de nacimiento no es válida.")]
         public DateOnly? BirthDate { get; set; }
         public string? Street { get; set; }
         public string? Number { get; set; }

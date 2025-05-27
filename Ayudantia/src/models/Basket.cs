@@ -43,9 +43,12 @@ namespace Ayudantia.Src.Models
 
             if (item == null) return;
 
+            if (quantity > item.Quantity)
+                throw new InvalidOperationException($"Intentas eliminar más productos de los que hay en el carrito (hay {item.Quantity}).");
+
             item.Quantity -= quantity;
 
-            if (item.Quantity <= 0)
+            if (item.Quantity == 0)
             {
                 Items.Remove(item);
             }

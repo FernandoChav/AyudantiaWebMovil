@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Ayudantia.Src.Dtos.ShippingAddress;
 using Ayudantia.Src.Models;
 
 namespace Ayudantia.Src.Dtos
@@ -12,7 +13,7 @@ namespace Ayudantia.Src.Dtos
 
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        public ShippingAddres Address { get; set; } = null!;
+        public ShippingAddressDto Address { get; set; } = null!;
         public int Total { get; set; } // En CLP, sin decimales
         public List<OrderItemDto> Items { get; set; } = [];
     }

@@ -17,5 +17,6 @@ public interface IProductRepository
     Task<bool> IsProductInOrdersAsync(int productId);
 
     IQueryable<Product> GetQueryableProducts();
+    Task<List<Product>> GetProductsByIdsAsync(List<int> ids);
 
 }

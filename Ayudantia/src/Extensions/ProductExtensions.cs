@@ -35,7 +35,10 @@ namespace Ayudantia.Src.Extensions
 
             var lowerCaseSearch = search.Trim().ToLower();
 
-            return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearch));
+            return query.Where(p =>
+                p.Name.ToLower().Contains(lowerCaseSearch) ||
+                p.Description.ToLower().Contains(lowerCaseSearch)
+            );
         }
         public static IQueryable<Product> Sort(this IQueryable<Product> query, string? orderBy)
         {
@@ -45,6 +48,20 @@ namespace Ayudantia.Src.Extensions
                 "priceDesc" => query.OrderByDescending(p => (double)p.Price),
                 _ => query.OrderBy(p => p.Name)
             };
+            return query;
+        }
+        public static IQueryable<Product> FilterByCondition(this IQueryable<Product> query, int? condition)
+        {
+            if (condition.HasValue)
+                query = query.Where(p => (int)p.Condition == condition.Value);
+            return query;
+        }
+        public static IQueryable<Product> FilterByPrice(this IQueryable<Product> query, decimal? min, decimal? max)
+        {
+            if (min.HasValue)
+                query = query.Where(p => p.Price >= min.Value);
+            if (max.HasValue)
+                query = query.Where(p => p.Price <= max.Value);
             return query;
         }
 

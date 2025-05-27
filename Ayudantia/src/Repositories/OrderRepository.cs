@@ -29,11 +29,12 @@ namespace Ayudantia.Src.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order?> GetOrderByIdAsync(int orderId, string userId)
+        public async Task<Order?> GetOrderByIdAsync(int id, string userId)
         {
             return await _context.Orders
+                .Include(o => o.ShippingAddress)
                 .Include(o => o.Items)
-                .FirstOrDefaultAsync(o => o.Id == orderId && o.UserId == userId);
+                .FirstOrDefaultAsync(o => o.Id == id && o.UserId == userId);
         }
 
         public async Task<List<Order>> GetAllOrdersAsync()

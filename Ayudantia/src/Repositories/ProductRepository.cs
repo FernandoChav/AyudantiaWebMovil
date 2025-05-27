@@ -50,5 +50,10 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
         return await _context.OrderItems.AnyAsync(i => i.ProductId == productId);
     }
 
-
+    public async Task<List<Product>> GetProductsByIdsAsync(List<int> ids)
+    {
+        return await _context.Products
+            .Where(p => ids.Contains(p.Id))
+            .ToListAsync();
+    }
 }
