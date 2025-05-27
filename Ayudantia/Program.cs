@@ -31,9 +31,7 @@ try
     {
         options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
     });
-    var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 
-    builder.WebHost.UseUrls($"http://*:{port}");
     builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -88,12 +86,12 @@ try
         opt.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidAudience = builder.Configuration["JWT:Audience"],
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SignInKey"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SignInKey"]!)),
             RoleClaimType = ClaimTypes.Role
         };
     });
