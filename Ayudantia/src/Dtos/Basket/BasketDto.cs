@@ -11,6 +11,6 @@ namespace Ayudantia.Src.Dtos
 
         public List<BasketItemDto> Items { get; set; } = [];
 
-        public double TotalPrice {get; set; }
+        public double TotalPrice { get; set; }
     }
 }
