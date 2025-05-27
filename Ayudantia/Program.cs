@@ -33,10 +33,7 @@ try
     });
     var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(int.Parse(port));
-    });
+    builder.WebHost.UseUrls($"http://*:{port}");
     builder.Services.AddTransient<ExceptionMIddleware>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IUserRepository, UserRepository>();
