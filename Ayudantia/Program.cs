@@ -120,11 +120,23 @@ try
     // crearmos la aplicacion con todo lo que se agrega al patron de diseño builder
     // y se le asigna el nombre de app
     var app = builder.Build();
-    app.UseMiddleware<ExceptionMIddleware>();
     await DbInitializer.InitDb(app);
+
+    // CORS debe ir **antes que cualquier otro middleware**
     app.UseCors("DefaultCorsPolicy");
+
+    // Luego manejo de errores
+    app.UseMiddleware<ExceptionMIddleware>();
+
+    // Seguridad y autorización
     app.UseAuthentication();
     app.UseAuthorization();
+
+
+
+
+    app.UseAuthorization();
+
     app.MapControllers();
 
     // corremos la aplicacion
