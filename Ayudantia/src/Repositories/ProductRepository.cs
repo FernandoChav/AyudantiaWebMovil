@@ -1,5 +1,5 @@
-
 using Ayudantia.Src.Data;
+using Ayudantia.Src.Dtos.Product;
 using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Models;
 
@@ -22,7 +22,6 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
         _context.Products.Remove(product);
         return Task.CompletedTask;
     }
-
 
     public async Task<Product> GetProductByIdAsync(int id)
     {
@@ -52,8 +51,33 @@ public class ProductRepository(StoreContext store, ILogger<Product> logger) : IP
 
     public async Task<List<Product>> GetProductsByIdsAsync(List<int> ids)
     {
-        return await _context.Products
-            .Where(p => ids.Contains(p.Id))
+        return await _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
+    }
+
+    public async Task<ProductFiltersDto> GetProductFiltersAsync()
+    {
+        List<string> products = await _context
+            .Products.Select(x => x.Brand)
+            .Distinct()
             .ToListAsync();
+        List<string> categories = await _context
+            .Products.Select(x => x.Category)
+            .Distinct()
+            .ToListAsync();
+        decimal minPrice = (decimal)await _context.Products.MinAsync(x => (double)x.Price);
+        decimal maxPrice = (decimal)await _context.Products.MaxAsync(x => (double)x.Price);
+        List<ProductCondition> conditions = await _context
+            .Products.Select(x => x.Condition)
+            .Distinct()
+            .ToListAsync();
+
+        return new ProductFiltersDto
+        {
+            Brands = products,
+            Categories = categories,
+            MinPrice = minPrice,
+            MaxPrice = maxPrice,
+            Conditions = conditions,
+        };
     }
 }
