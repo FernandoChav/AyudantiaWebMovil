@@ -95,10 +95,12 @@ try
             RoleClaimType = ClaimTypes.Role
         };
     });
-    builder.WebHost.ConfigureKestrel(serverOptions =>
+    builder.WebHost.ConfigureKestrel(options =>
     {
-        serverOptions.ListenAnyIP(int.Parse(Environment.GetEnvironmentVariable("PORT") ?? "8080"));
+        var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+        options.ListenAnyIP(int.Parse(port));
     });
+
     builder.Services.AddDbContext<StoreContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
     builder.Host.UseSerilog((context, services, configuration) => configuration
