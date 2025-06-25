@@ -2,10 +2,15 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /app
 
-COPY *.csproj ./
+# Copiar el .csproj desde la raíz del repo
+COPY Ayudantia/*.csproj ./
+COPY Ayudantia/*.sln ./
+
+# Restaurar dependencias
 RUN dotnet restore
 
-COPY . ./
+# Copiar el resto del código fuente
+COPY Ayudantia/. ./
 RUN dotnet publish -c Release -o out
 
 # Imagen final
