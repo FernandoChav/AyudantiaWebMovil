@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.csproj.user
+.git/
+.gitignore
+.gitattributes
+.DS_Store
