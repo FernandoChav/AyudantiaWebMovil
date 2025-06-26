@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Ayudantia.Src.Dtos.Product;
 using Ayudantia.Src.Models;
 
 namespace Ayudantia.Src.Interfaces;
@@ -18,5 +19,5 @@ public interface IProductRepository
 
     IQueryable<Product> GetQueryableProducts();
     Task<List<Product>> GetProductsByIdsAsync(List<int> ids);
-
+    Task<ProductFiltersDto> GetProductFiltersAsync();
 }

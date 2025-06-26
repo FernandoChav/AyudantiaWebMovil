@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Ayudantia.Src.Data;
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Dtos.Product;
 using Ayudantia.Src.Extensions;
 using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Interfaces;
@@ -16,42 +11,53 @@ using Ayudantia.Src.RequestHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Ayudantia.Src.Controllers;
 
-public class ProductController(ILogger<ProductController> logger, UnitOfWork unitOfWork, IPhotoService photoService) : BaseController
+public class ProductController(
+    ILogger<ProductController> logger,
+    UnitOfWork unitOfWork,
+    IPhotoService photoService
+) : BaseController
 {
     private readonly ILogger<ProductController> _logger = logger;
     private readonly UnitOfWork _context = unitOfWork;
     private readonly IPhotoService _photoService = photoService;
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged([FromQuery] ProductParams productParams)
+    public async Task<ActionResult<ApiResponse<IEnumerable<Product>>>> GetPaged(
+        [FromQuery] ProductParams productParams
+    )
     {
         var query = _context.ProductRepository.GetQueryableProducts();
 
-        query = query.Search(productParams.Search)
-                     .Filter(productParams.Brands, productParams.Categories)
-                     .Sort(productParams.OrderBy)
-                     .FilterByCondition(productParams.Conditions)
-                     .FilterByPrice(productParams.MinPrice, productParams.MaxPrice);
+        query = query
+            .Search(productParams.Search)
+            .Filter(productParams.Brands, productParams.Categories)
+            .Sort(productParams.OrderBy)
+            .FilterByCondition(productParams.Conditions)
+            .FilterByPrice(productParams.MinPrice, productParams.MaxPrice);
 
-        var pagedList = await PagedList<Product>.ToPagedList(query, productParams.PageNumber, productParams.PageSize);
+        var pagedList = await PagedList<Product>.ToPagedList(
+            query,
+            productParams.PageNumber,
+            productParams.PageSize
+        );
 
         if (pagedList == null || pagedList.Count == 0)
+        {
             return Ok(new ApiResponse<IEnumerable<Product>>(false, "No hay productos disponibles"));
-
+        }
 
         Response.AddPaginationHeader(pagedList.Metadata);
 
-        return Ok(new ApiResponse<IEnumerable<Product>>(
-            true,
-            "Productos obtenidos correctamente",
-            pagedList
-        ));
+        return Ok(
+            new ApiResponse<IEnumerable<Product>>(
+                true,
+                "Productos obtenidos correctamente",
+                pagedList
+            )
+        );
     }
-
-
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<Product>>> GetById(int id)
@@ -59,9 +65,12 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
         var product = await _context.ProductRepository.GetProductByIdAsync(id);
 
         return product == null
-            ? (ActionResult<ApiResponse<Product>>)NotFound(new ApiResponse<Product>(false, "Product not found"))
-            : (ActionResult<ApiResponse<Product>>)Ok(new ApiResponse<Product>(true, "Product retrieved successfully", product));
+            ? (ActionResult<ApiResponse<Product>>)
+                NotFound(new ApiResponse<Product>(false, "Product not found"))
+            : (ActionResult<ApiResponse<Product>>)
+                Ok(new ApiResponse<Product>(true, "Product retrieved successfully", product));
     }
+
     [Authorize(Roles = "Admin")]
     [HttpPost("create")]
     public async Task<ActionResult<ApiResponse<Product>>> Create([FromForm] ProductDto dto)
@@ -74,12 +83,14 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
             var result = await _photoService.AddPhotoAsync(image);
             if (result.Error != null)
             {
-                return BadRequest(new ApiResponse<Product>(
-                    false,
-                    "Error al agregar la imagen",
-                    null,
-                    new List<string> { result.Error.Message }
-                ));
+                return BadRequest(
+                    new ApiResponse<Product>(
+                        false,
+                        "Error al agregar la imagen",
+                        null,
+                        new List<string> { result.Error.Message }
+                    )
+                );
             }
 
             urls.Add(result.SecureUrl.AbsoluteUri);
@@ -97,14 +108,16 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
             new ApiResponse<Product>(true, "Producto agregado correctamente", product)
         );
     }
+
     [Authorize(Roles = "Admin")]
     [HttpPatch("{id}")]
     public async Task<ActionResult<ApiResponse<Product>>> Update(int id, [FromForm] ProductDto dto)
     {
         var product = await _context.ProductRepository.GetProductByIdAsync(id);
         if (product == null)
+        {
             return NotFound(new ApiResponse<Product>(false, "Producto no encontrado"));
-
+        }
 
         if (dto.Images.Any())
         {
@@ -115,7 +128,9 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
                 {
                     var oldPublicId = CloudinaryHelper.ExtractPublicIdFromUrl(url);
                     if (!string.IsNullOrEmpty(oldPublicId))
+                    {
                         await _photoService.DeletePhotoAsync(oldPublicId);
+                    }
                 }
             }
 
@@ -123,12 +138,14 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
             var result = await _photoService.AddPhotoAsync(dto.Images.First());
             if (result.Error != null)
             {
-                return BadRequest(new ApiResponse<Product>(
-                    false,
-                    "Error al subir nueva imagen",
-                    null,
-                    new List<string> { result.Error.Message }
-                ));
+                return BadRequest(
+                    new ApiResponse<Product>(
+                        false,
+                        "Error al subir nueva imagen",
+                        null,
+                        new List<string> { result.Error.Message }
+                    )
+                );
             }
 
             product.Urls = new List<string> { result.SecureUrl.AbsoluteUri };
@@ -155,7 +172,9 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
     {
         var product = await _context.ProductRepository.GetProductByIdAsync(id);
         if (product == null)
+        {
             return NotFound(new ApiResponse<string>(false, "Producto no encontrado"));
+        }
 
         bool isInOrders = await _context.ProductRepository.IsProductInOrdersAsync(id);
         if (isInOrders)
@@ -164,7 +183,12 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
             await _context.ProductRepository.UpdateProductAsync(product);
             await _context.SaveChangeAsync();
 
-            return Ok(new ApiResponse<string>(true, "Producto desactivado correctamente (asociado a pedidos)"));
+            return Ok(
+                new ApiResponse<string>(
+                    true,
+                    "Producto desactivado correctamente (asociado a pedidos)"
+                )
+            );
         }
 
         if (product.Urls != null && product.Urls.Any())
@@ -173,7 +197,9 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
             {
                 var publicId = CloudinaryHelper.ExtractPublicIdFromUrl(url);
                 if (!string.IsNullOrEmpty(publicId))
+                {
                     await _photoService.DeletePhotoAsync(publicId);
+                }
             }
         }
 
@@ -183,4 +209,18 @@ public class ProductController(ILogger<ProductController> logger, UnitOfWork uni
         return Ok(new ApiResponse<string>(true, "Producto eliminado correctamente"));
     }
 
+    [HttpGet("filters")]
+    public async Task<ActionResult<ApiResponse<ProductFiltersDto>>> GetFilters()
+    {
+        var filters = await _context.ProductRepository.GetProductFiltersAsync();
+
+        if (filters == null)
+        {
+            return NotFound(new ApiResponse<ProductFiltersDto>(false, "No se encontraron filtros"));
+        }
+
+        return Ok(
+            new ApiResponse<ProductFiltersDto>(true, "Filtros obtenidos correctamente", filters)
+        );
+    }
 }
