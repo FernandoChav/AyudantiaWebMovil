@@ -4,7 +4,7 @@ using Ayudantia.Src.Data;
 using Ayudantia.Src.Dtos;
 using Ayudantia.Src.Helpers;
 using Ayudantia.Src.Mappers;
-using Ayudantia.Src.Models;
+
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +23,9 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
         if (userId is null)
             return Unauthorized(new ApiResponse<string>(false, "Usuario no autenticado"));
 
-        var address = await _unitOfWork.ShippingAddressRepository.GetByUserIdAsync(userId);
-        if (address == null)
-            return BadRequest(new ApiResponse<string>(false, "No tienes una dirección registrada. Por favor agrégala antes de comprar."));
+        var addres = await _unitOfWork.ShippingAddressRepository.GetByUserIdAsync(userId);
+        if (addres == null || addres.Number == "" || addres.Street == "" || addres.Commune == "" || addres.Region == "" || addres.PostalCode == "")
+            return BadRequest(new ApiResponse<string>(false, "No tienes una dirección completa registrada. Por favor agrégala antes de comprar."));
 
         var basketId = Request.Cookies["basketId"];
         if (string.IsNullOrEmpty(basketId))
@@ -35,7 +35,7 @@ public class OrderController(ILogger<OrderController> logger, UnitOfWork unitOfW
         if (basket == null || !basket.Items.Any())
             return BadRequest(new ApiResponse<string>(false, "El carrito está vacío"));
 
-        var order = OrderMapper.FromBasket(basket, userId, address.Id);
+        var order = OrderMapper.FromBasket(basket, userId, addres.Id);
 
         // Validar y reducir stock
         foreach (var item in order.Items)
