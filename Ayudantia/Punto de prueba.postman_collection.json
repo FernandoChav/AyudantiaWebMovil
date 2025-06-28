@@ -3,7 +3,8 @@
 		"_postman_id": "880d7998-03a5-48b4-b223-4c5cdd44b00b",
 		"name": "Punto de prueba",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34959422"
+		"_exporter_id": "34959422",
+		"_collection_link": "https://www.postman.com/a99999-0732/workspace/ayudantia/collection/34959422-880d7998-03a5-48b4-b223-4c5cdd44b00b?action=share&source=collection_link&creator=34959422"
 	},
 	"item": [
 		{
@@ -52,9 +53,9 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}Product",
+									"raw": "{{url}}product",
 									"host": [
-										"{{url}}Product"
+										"{{url}}product"
 									]
 								}
 							},
@@ -83,14 +84,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}product?search=Redragon}",
+									"raw": "{{url}}product?search=Awesome Rubber Table",
 									"host": [
 										"{{url}}product"
 									],
 									"query": [
 										{
 											"key": "search",
-											"value": "Redragon}"
+											"value": "Awesome Rubber Table"
 										}
 									]
 								}
@@ -103,14 +104,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}product?brands=Logitech",
+									"raw": "{{url}}product?brands=Kreiger%20-%20McDermott",
 									"host": [
 										"{{url}}product"
 									],
 									"query": [
 										{
 											"key": "brands",
-											"value": "Logitech"
+											"value": "Kreiger%20-%20McDermott"
 										}
 									]
 								}
@@ -123,14 +124,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}product?categories=peripherals",
+									"raw": "{{url}}product?categories=Automotive",
 									"host": [
 										"{{url}}product"
 									],
 									"query": [
 										{
 											"key": "categories",
-											"value": "peripherals"
+											"value": "Automotive"
 										}
 									]
 								}
@@ -163,14 +164,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}product?orderBy=-price",
+									"raw": "{{url}}product?orderBy=priceDesc",
 									"host": [
 										"{{url}}product"
 									],
 									"query": [
 										{
 											"key": "orderBy",
-											"value": "-price"
+											"value": "priceDesc"
 										}
 									]
 								}
@@ -183,7 +184,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}product?pageNumber=1&pageSize=7",
+									"raw": "{{url}}product?pageNumber=1&pageSize=20",
 									"host": [
 										"{{url}}product"
 									],
@@ -194,35 +195,8 @@
 										},
 										{
 											"key": "pageSize",
-											"value": "7"
+											"value": "20"
 										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Obtener perfil",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token_user}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}user/profile",
-									"host": [
-										"{{url}}user"
-									],
-									"path": [
-										"profile"
 									]
 								}
 							},
@@ -311,7 +285,7 @@
 					"name": "Put",
 					"item": [
 						{
-							"name": "New Request",
+							"name": "Actualizar producto",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -323,7 +297,7 @@
 										}
 									]
 								},
-								"method": "PUT",
+								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "formdata",
@@ -366,12 +340,12 @@
 									]
 								},
 								"url": {
-									"raw": "{{url}}product/12",
+									"raw": "{{url}}product/11",
 									"host": [
 										"{{url}}product"
 									],
 									"path": [
-										"12"
+										"11"
 									]
 								}
 							},
@@ -383,7 +357,7 @@
 					"name": "Delete",
 					"item": [
 						{
-							"name": "New Request",
+							"name": "Eliminar producto",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -426,7 +400,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"firtsName\": \"Yerko2\",\r\n    \"lastName\": \"Castillos\",\r\n    \"email\": \"yerkos@gmail.com\",\r\n    \"thelephone\": \"+56957519245\",\r\n    \"password\": \"StrongPassword123!\",\r\n    \"confirmPassword\": \"StrongPassword123!\",\r\n    \"street\": \"Calle Falsa\",\r\n    \"number\": \"123\",\r\n    \"commune\": \"Springfield\",\r\n    \"region\": \"Springfield Region\",\r\n    \"postalCode\": \"1234567\"\r\n}\r\n",
+									"raw": "{\r\n    \"firtsName\": \"Maricel\",\r\n    \"lastName\": \"Briceño\",\r\n    \"email\": \"Sergi.Parada@alumnos.ucn.cl\",\r\n    \"thelephone\": \"+56957519245\",\r\n    \"password\": \"StrongPassword123!\",\r\n    \"confirmPassword\": \"StrongPassword123!\",\r\n    \"BirthDate\" : \"2002-10-11\"\r\n    \r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -447,12 +421,26 @@
 						},
 						{
 							"name": "Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json().data.token ;\r",
+											"\r",
+											"pm.globals.set(\"token_user\", jsonData)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"email\": \"yerkos@gmail.com\",\r\n  \"password\": \"StrongPassword123!\"\r\n}",
+									"raw": "{\r\n  \"email\": \"Sergi.Parada@alumnos.ucn.cl\",\r\n  \"password\": \"StrongPassword123!\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -473,6 +461,20 @@
 						},
 						{
 							"name": "Login Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = pm.response.json().data.token ;\r",
+											"\r",
+											"pm.globals.set(\"token_admin\", jsonData) ;"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -534,7 +536,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -542,14 +544,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}user?isActive=true",
+									"raw": "{{url}}user?isActive=false",
 									"host": [
 										"{{url}}user"
 									],
 									"query": [
 										{
 											"key": "isActive",
-											"value": "true"
+											"value": "false"
 										}
 									]
 								}
@@ -564,7 +566,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -594,7 +596,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -624,7 +626,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -658,7 +660,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -688,7 +690,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "{{token_admin}}",
 											"type": "string"
 										}
 									]
@@ -696,12 +698,50 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}user/Jacinto.Mills21@gmail.com",
+									"raw": "{{url}}user/find?email=Gabriel.cruz@alumnos.ucn.cl",
 									"host": [
 										"{{url}}user"
 									],
 									"path": [
-										"Jacinto.Mills21@gmail.com"
+										"find"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "gabriel",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "Gabriel.cruz@alumnos.ucn.cl"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener perfil",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}user/profile",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"profile"
 									]
 								}
 							},
@@ -712,43 +752,6 @@
 				{
 					"name": "PUT",
 					"item": [
-						{
-							"name": "actualizar estado",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"reason\": \"Infracción a las normas\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}user/Jacinto.Mills21@gmail.com/status",
-									"host": [
-										"{{url}}user"
-									],
-									"path": [
-										"Jacinto.Mills21@gmail.com",
-										"status"
-									]
-								}
-							},
-							"response": []
-						},
 						{
 							"name": "Actualizar direccion de envio",
 							"request": {
@@ -763,6 +766,168 @@
 									]
 								},
 								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Street\": \"Eleutreio Ramirez\",\r\n    \"Number\" : \"2949\",\r\n    \"Commune\" : \"Calama\",\r\n    \"Region\" : \"Antofagasta\",\r\n    \"PostalCode\" : \"1390000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/address",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"address"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PATCH",
+					"item": [
+						{
+							"name": "Cambiar contraseña",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"CurrentPassword\": \"StrongPassword123!\",\r\n    \"NewPassword\": \"Hola123456$\",\r\n    \"ConfirmPassword\" : \"Hola123456$\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/profile/password",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"profile",
+										"password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar Perfil Usuario",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"BirthDate\": \"2002-08-12\"\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/profile",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "actualizar estado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"reason\": \"Tiene mas de 225\",\r\n  \"Email\": \"ignacio.mancilla@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}user/toggle-status",
+									"host": [
+										"{{url}}user"
+									],
+									"path": [
+										"toggle-status"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "crear direccion",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
@@ -865,7 +1030,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}basket?productId=10&quantity=1",
+							"raw": "{{url}}basket?productId=10&quantity=2",
 							"host": [
 								"{{url}}basket"
 							],
@@ -876,7 +1041,7 @@
 								},
 								{
 									"key": "quantity",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -953,7 +1118,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{token}}",
+									"value": "{{token_user}}",
 									"type": "string"
 								}
 							]
@@ -973,6 +1138,45 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://localhost:7088/api/",
+			"type": "default"
+		},
+		{
+			"key": "token_admin",
+			"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwYTcwNzU4YS0xMTQ0LTRlYjItODZmZi01ZjgyNDE1YjMwNmIiLCJlbWFpbCI6ImlnbmFjaW8ubWFuY2lsbGFAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IklnbmFjaW8iLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE3NTExMjg0NzcsImV4cCI6MTc1MTczMzI3NywiaWF0IjoxNzUxMTI4NDc3LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MDg4IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzA4OCJ9.QrCO9gSQkC5NV6Gp50hnvqKHdIsxcjNv3tplqtjdGczKVjoWZacIR_bBMXx2w8yGW3J7mKidrGyhPfhH7zf0WA",
+			"type": "secret"
+		},
+		{
+			"key": "token_user",
+			"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzYzhmNzVkYi03M2IxLTQ5ODQtOGViYi1jNmZiMWI0YmE1MTgiLCJlbWFpbCI6IlNlcmdpLlBhcmFkYUBhbHVtbm9zLnVjbi5jbCIsImdpdmVuX25hbWUiOiJNYXJpY2VsIiwicm9sZSI6IlVzZXIiLCJuYmYiOjE3NTExMjg0NzMsImV4cCI6MTc1MTczMzI3MywiaWF0IjoxNzUxMTI4NDczLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MDg4IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzA4OCJ9.6ZuG6ITJtSISHU3zqeEGOw1xKkI7g88tCO3T8sHm2LLNhtdut68X58sgT8vyr9HMpw7dQIbXyW8Pgt7tZMIjrQ",
+			"type": "secret"
 		}
 	]
 }
