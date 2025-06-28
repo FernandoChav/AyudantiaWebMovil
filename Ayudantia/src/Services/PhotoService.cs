@@ -47,6 +47,68 @@ namespace Ayudantia.Src.Services
             ImageUploadResult? uploadResult = await _cloudinary.UploadAsync(uploadParams);
             return uploadResult;
         }
+        public async Task<ImageUploadResult> AddPhotoFromPathAsync(string filePath)
+        {
+            if (!File.Exists(filePath))
+                throw new FileNotFoundException($"No se encontró el archivo: {filePath}");
+
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            if (!allowedExtensions.Contains(extension))
+                throw new ArgumentException("Formato de imagen no compatible");
+
+            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
+            string publicId = $"products/{fileNameWithoutExt}";
+
+            // Verificar si ya existe en Cloudinary
+            try
+            {
+                var existing = await _cloudinary.GetResourceAsync(publicId);
+                if (existing != null && !string.IsNullOrEmpty(existing.SecureUrl))
+                {
+                    return new ImageUploadResult
+                    {
+                        SecureUrl = new Uri(existing.SecureUrl),
+                        PublicId = existing.PublicId
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                // Puede ser que no exista, o que haya error de conexión
+                if (!ex.Message.Contains("not found", StringComparison.OrdinalIgnoreCase))
+                    throw new ApplicationException("Error al verificar la existencia de la imagen en Cloudinary", ex);
+            }
+
+            // Si no existe, subirla
+            try
+            {
+                await using var stream = File.OpenRead(filePath);
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(Path.GetFileName(filePath), stream),
+                    Folder = "products",
+                    PublicId = fileNameWithoutExt, // Evita duplicación
+                    UseFilename = true,
+                    UniqueFilename = false,
+                    Overwrite = false
+                };
+
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+                if (uploadResult.Error != null)
+                {
+                    throw new ApplicationException($"Error al subir imagen '{filePath}': {uploadResult.Error.Message}");
+                }
+
+                return uploadResult;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Error inesperado al subir imagen '{filePath}' a Cloudinary", ex);
+            }
+        }
+
 
 
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)

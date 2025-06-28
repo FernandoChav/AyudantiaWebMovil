@@ -9,26 +9,23 @@ namespace Ayudantia.Src.Extensions
 {
     public static class ProductExtensions
     {
-        public static IQueryable<Product> Filter(this IQueryable<Product> query, string? brands, string? categories)
+        public static IQueryable<Product> Filter(this IQueryable<Product> query, List<string>? brands, List<string>? categories)
         {
-            var brandList = new List<string>();
-            var categoryList = new List<string>();
-
-            if (!string.IsNullOrWhiteSpace(brands))
+            if (brands != null && brands.Any())
             {
-                brandList.AddRange(brands.ToLower().Split(","));
+                var lowerBrands = brands.Select(b => b.Trim().ToLowerInvariant()).ToList();
+                query = query.Where(p => lowerBrands.Contains(p.Brand.ToLower()));
             }
 
-            if (!string.IsNullOrWhiteSpace(categories))
+            if (categories != null && categories.Any())
             {
-                categoryList.AddRange(categories.ToLower().Split(","));
+                var lowerCategories = categories.Select(c => c.Trim().ToLowerInvariant()).ToList();
+                query = query.Where(p => lowerCategories.Contains(p.Category.ToLower()));
             }
-
-            query = query.Where(p => brandList.Count == 0 || brandList.Contains(p.Brand.ToLower()));
-            query = query.Where(p => categoryList.Count == 0 || categoryList.Contains(p.Category.ToLower()));
 
             return query;
         }
+
         public static IQueryable<Product> Search(this IQueryable<Product> query, string? search)
         {
             if (string.IsNullOrWhiteSpace(search)) return query;

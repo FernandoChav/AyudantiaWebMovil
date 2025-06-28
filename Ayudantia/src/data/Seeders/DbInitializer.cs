@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Ayudantia.Src.Data.Seeders;
 using Ayudantia.Src.Dtos;
+using Ayudantia.Src.Interfaces;
 using Ayudantia.Src.Mappers;
 using Ayudantia.Src.Models;
 
@@ -21,22 +22,15 @@ public class DbInitializer
     {
         using var scope = app.Services.CreateScope();
 
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>()
-            ?? throw new InvalidOperationException("Could not get UserManager");
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+        var photoService = scope.ServiceProvider.GetRequiredService<IPhotoService>();
 
-        var context = scope.ServiceProvider.GetRequiredService<StoreContext>()
-            ?? throw new InvalidOperationException("Could not get StoreContext");
-
-        await SeedData(context, userManager);
-    }
-
-    private static async Task SeedData(StoreContext context, UserManager<User> userManager)
-    {
         await context.Database.MigrateAsync();
 
         if (!context.Products.Any())
         {
-            var products = ProductSeeder.GenerateProducts(10);
+            var products = await ProductSeeder.GenerateProductsAsync(10, photoService);
             context.Products.AddRange(products);
         }
 
@@ -48,4 +42,7 @@ public class DbInitializer
 
         await context.SaveChangesAsync();
     }
+
+
+    
 }

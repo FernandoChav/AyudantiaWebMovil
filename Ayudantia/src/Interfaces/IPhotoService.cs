@@ -11,5 +11,6 @@ namespace Ayudantia.Src.Interfaces
     {
         Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
         Task<DeletionResult> DeletePhotoAsync(string publicId);
+        Task<ImageUploadResult> AddPhotoFromPathAsync(string filePath);
     }
 }

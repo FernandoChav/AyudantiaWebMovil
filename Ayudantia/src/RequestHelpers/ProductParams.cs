@@ -11,8 +11,8 @@ namespace Ayudantia.Src.RequestHelpers
     {
         public string? OrderBy { get; set; }
         public string? Search { get; set; }
-        public string? Brands { get; set; }
-        public string? Categories { get; set; }
+        public List<string>? Brands { get; set; }
+        public List<string>? Categories { get; set; }
         public int? Conditions { get; set; }
 
         public decimal? MinPrice { get; set; }
